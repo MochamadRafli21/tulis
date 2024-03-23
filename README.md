@@ -1,4 +1,4 @@
-This is personal blog project using Tiptap, Next Js, Children first component, and Drizzle.
+This is personal blog project using Next Js, Children first component, and Drizzle.
 ## Getting Started
 
 First, run the development server:

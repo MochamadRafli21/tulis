@@ -16,14 +16,19 @@ export const BlogForm: FC<BlogFormProps> = ({ onSubmit, data }) => {
         <h1 className="text-2xl font-semibold">BLOG</h1>
         <Button type="submit">Submit</Button>
       </div>
-      <input type="hidden" name="form-name" value="contact" />
       <div>
         <Label htmlFor="title">Title</Label>
-        <Input inputSize={"lg"} placeholder="Mobil Untuk Masa Depan" type="text" defaultValue={data?.title} name="title" />
+        <Input
+          inputSize={"xl"}
+          placeholder="Mobil Untuk Masa Depan"
+          type="text"
+          defaultValue={data?.title}
+          name="title"
+        />
       </div>
       <div className="mt-4">
         <Label htmlFor="content">Content</Label>
-        <Quill name="content" className="h-full" content={data?.content} />
+        <Quill name="content" className="min-h-[300px]" content={data?.content} />
       </div>
     </form>
   )

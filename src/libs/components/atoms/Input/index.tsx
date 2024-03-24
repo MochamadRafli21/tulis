@@ -9,6 +9,7 @@ export const inputStyles = cva('py-2 px-4 rounded border-b border-gray-300 focus
       sm: ["h-8", "text-sm", "px-2", "py-2"],
       md: ["h-10", "text-md", "px-2", "py-2"],
       lg: ["h-12", "text-lg", "px-2", "py-2"],
+      xl: ["h-24", "text-4xl", "px-2", "py-2"],
     },
     variant: {
       bordered: 'bg-transparent text-slate-600 border border-slate-300',

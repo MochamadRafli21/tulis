@@ -3,12 +3,13 @@ import { Quill, Label, Button, Input } from "../atoms"
 
 interface BlogFormProps {
   onSubmit: (e: any) => void,
-  title?: string,
-  content?: string
+  data?: {
+    title?: string,
+    content?: string
+  }
 }
 
-export const BlogForm: FC<BlogFormProps> = ({ onSubmit, title, content }) => {
-  console.log(title, content)
+export const BlogForm: FC<BlogFormProps> = ({ onSubmit, data }) => {
   return (
     <form action={onSubmit}>
       <div className="w-full flex justify-between items-center rounded-lg border border-gray-300 shadow px-4 py-2 mb-4">
@@ -18,11 +19,11 @@ export const BlogForm: FC<BlogFormProps> = ({ onSubmit, title, content }) => {
       <input type="hidden" name="form-name" value="contact" />
       <div>
         <Label htmlFor="title">Title</Label>
-        <Input inputSize={"lg"} placeholder="Mobil Untuk Masa Depan" type="text" value={title} name="title" />
+        <Input inputSize={"lg"} placeholder="Mobil Untuk Masa Depan" type="text" defaultValue={data?.title} name="title" />
       </div>
       <div className="mt-4">
         <Label htmlFor="content">Content</Label>
-        <Quill name="content" className="h-full" />
+        <Quill name="content" className="h-full" content={data?.content} />
       </div>
     </form>
   )

@@ -1,6 +1,6 @@
 {
-  "id": "8f2840d5-0824-418f-bf1b-18c9118f6e9f",
-  "prevId": "cdfb28eb-5bd4-44a9-91a7-d9fd87d3cb92",
+  "id": "f09274af-d7bd-4a6e-9d7b-9d13b31525e1",
+  "prevId": "a572ac9a-8687-4779-8723-a602552a01ee",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -10,9 +10,10 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "uuid",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": "gen_random_uuid()"
         },
         "title": {
           "name": "title",
@@ -22,7 +23,7 @@
         },
         "content": {
           "name": "content",
-          "type": "json",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },

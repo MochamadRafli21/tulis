@@ -8,6 +8,13 @@
       "when": 1711143964289,
       "tag": "0000_marvelous_prism",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1711288662850,
+      "tag": "0001_rich_killmonger",
+      "breakpoints": true
     }
   ]
 }

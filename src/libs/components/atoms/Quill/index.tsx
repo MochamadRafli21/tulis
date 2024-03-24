@@ -6,8 +6,8 @@ import React, { useState } from 'react';
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
 
 export const Quill = (
-  { className, name }: { className?: string, name?: string }) => {
-  const [value, setValue] = useState("");
+  { className, name, content }: { className?: string, name?: string, content?: string }) => {
+  const [value, setValue] = useState(content ?? "");
 
   const imageHandler = (e: any) => {
     console.log(e)

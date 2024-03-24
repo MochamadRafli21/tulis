@@ -7,14 +7,19 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "db:generate": "drizzle-kit generate:pg --schema=./src/libs/database/schema/index.ts"
+    "db:generate": "drizzle-kit generate:pg --schema=./src/libs/database/schema/index.ts",
+    "db:push": "bun run tsx src/libs/database/migrate.ts"
   },
   "dependencies": {
+    "class-variance-authority": "^0.7.0",
+    "dotenv": "^16.4.5",
     "drizzle-orm": "^0.30.4",
-    "next": "13.5.4",
+    "html-entities": "^2.5.2",
+    "next": "latest",
     "pg": "^8.11.3",
-    "react": "^18",
-    "react-dom": "^18"
+    "react": "latest",
+    "react-dom": "latest",
+    "react-quill": "^2.0.0"
   },
   "devDependencies": {
     "@types/node": "^20",
@@ -24,7 +29,7 @@
     "autoprefixer": "^10",
     "drizzle-kit": "^0.20.14",
     "eslint": "^8",
-    "eslint-config-next": "13.5.4",
+    "eslint-config-next": "latest",
     "postcss": "^8",
     "tailwindcss": "^3",
     "typescript": "^5"

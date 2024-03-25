@@ -1,4 +1,5 @@
 export * from './Quill'
+export * from './quillContent'
 export * from './Button'
 export * from './Input'
 export * from './Labels'

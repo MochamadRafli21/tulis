@@ -1,6 +1,5 @@
 import { getBlogById } from "@/app/actions";
-import { renderHTML } from "@/libs/utils/renderHTML";
-import { Button } from "@/libs/components/atoms";
+import { Button, QuilContent } from "@/libs/components/atoms";
 import Link from "next/link"
 
 export default async function BlogAdd({ params }: {
@@ -31,9 +30,7 @@ export default async function BlogAdd({ params }: {
         <div className="mb-6 w-full items-start">
           <h1 className="text-5xl font-bold">{blog?.title}</h1>
         </div>
-        <div>
-          {blog && renderHTML(blog?.content)}
-        </div>
+        <QuilContent className="mt-2" content={blog ? blog.content : ""} />
       </div>
     </main >
   )

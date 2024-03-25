@@ -27,7 +27,7 @@ export const BlogForm: FC<BlogFormProps> = ({ onSubmit, data }) => {
         />
       </div>
       <div className="mt-4">
-        <Label htmlFor="content">Content</Label>
+        <Label className="mb-4" htmlFor="content">Content</Label>
         <Quill name="content" className="min-h-[300px]" content={data?.content} />
       </div>
     </form>

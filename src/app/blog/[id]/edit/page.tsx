@@ -25,8 +25,8 @@ export default async function BlogAdd({ params }: {
   const blog = await getData()
 
   return (
-    <main className="flex min-h-screen bg-secondary-100 flex-col items-center justify-between px-24">
-      <div className="bg-white min-h-screen w-full max-w-5xl justify-center py-4 text-sm lg:flex">
+    <main className="flex min-h-screen bg-secondary-100 flex-col items-center justify-between p-2 md:px-24">
+      <div className="bg-white min-h-screen w-full max-w-3xl justify-center md:p-4 text-sm lg:flex">
         <BlogForm onSubmit={onSubmit} data={{ title: blog?.title, content: blog?.content }} />
       </div>
     </main>

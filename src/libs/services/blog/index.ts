@@ -1,7 +1,10 @@
+"use server"
+
 import { db } from "@/libs/database";
 import { blog } from "@/libs/database/schema";
 import { Blog } from "@/libs/zod/schema";
 import { eq, desc } from "drizzle-orm";
+import DOMPurify from "isomorphic-dompurify";
 
 export const storeBlog = async ({ title, content, is_published }: Blog) => {
   const data = await db
@@ -34,6 +37,10 @@ export const getBlog = async (id: string) => {
     .from(blog)
     .where(eq(blog.id, id))
     .limit(1);
+
+  if (data.length > 0) {
+    data[0].content = DOMPurify.sanitize(data[0].content);
+  }
   return data[0];
 }
 
@@ -42,6 +49,12 @@ export const getBlogs = async () => {
     .select()
     .from(blog)
     .orderBy(desc(blog.id));
+
+  if (data.length > 0) {
+    data.forEach((item) => {
+      item.content = DOMPurify.sanitize(item.content);
+    });
+  }
   return data;
 }
 

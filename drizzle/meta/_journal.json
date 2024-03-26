@@ -15,6 +15,13 @@
       "when": 1711288662850,
       "tag": "0001_rich_killmonger",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1711473266383,
+      "tag": "0002_mushy_jetstream",
+      "breakpoints": true
     }
   ]
 }

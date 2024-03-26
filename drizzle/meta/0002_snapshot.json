@@ -1,6 +1,6 @@
 {
-  "id": "a572ac9a-8687-4779-8723-a602552a01ee",
-  "prevId": "8f2840d5-0824-418f-bf1b-18c9118f6e9f",
+  "id": "012dbf49-1016-4955-bb4d-32afd56ac13a",
+  "prevId": "f09274af-d7bd-4a6e-9d7b-9d13b31525e1",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -21,9 +21,28 @@
           "primaryKey": false,
           "notNull": true
         },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "banner": {
+          "name": "banner",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "subtitle": {
+          "name": "subtitle",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "''"
+        },
         "content": {
           "name": "content",
-          "type": "json",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -51,7 +70,15 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "blogs_slug_unique": {
+          "name": "blogs_slug_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "slug"
+          ]
+        }
+      }
     }
   },
   "enums": {},

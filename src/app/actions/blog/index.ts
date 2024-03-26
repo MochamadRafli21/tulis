@@ -16,7 +16,6 @@ export async function createBlog(formData: FormData) {
   try {
     await storeBlog(blog)
     revalidatePath("/")
-    revalidatePath("blog/*")
   } catch (error) {
     console.log(error)
   }

@@ -7,15 +7,15 @@ import { eq, desc } from "drizzle-orm";
 import DOMPurify from "isomorphic-dompurify";
 import { generateSlug } from "@/libs/utils";
 
-export const storeBlog = async ({ title, content, is_published, subtitle }: Blog) => {
+export const storeBlog = async ({ title, content, is_published, subtitle, banner }: Blog) => {
   const data = await db
     .insert(blog)
-    .values({ title, content, is_published, slug: generateSlug(title), subtitle })
+    .values({ title, content, is_published, slug: generateSlug(title), subtitle, banner })
     .returning();
   return data[0];
 }
 
-export const updateBlog = async (id: string, { title, content, is_published, subtitle }: Blog) => {
+export const updateBlog = async (id: string, { title, content, is_published, subtitle, banner }: Blog) => {
   const data = await db
     .update(blog)
     .set({
@@ -24,6 +24,7 @@ export const updateBlog = async (id: string, { title, content, is_published, sub
       is_published,
       slug: generateSlug(title),
       subtitle: subtitle,
+      banner
     })
     .where(eq(blog.id, id))
     .returning();

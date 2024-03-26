@@ -1,6 +1,7 @@
 import { FC } from "react"
 import { Quill, Label, Button, TextArea } from "../atoms"
 import SubtitleInput from "../molecules/SubtitleInput"
+import BannerInput from "../molecules/BannerInput"
 
 interface BlogFormProps {
   onSubmit: (e: any) => void,
@@ -8,6 +9,7 @@ interface BlogFormProps {
     title?: string,
     content?: string
     subtitle?: string
+    banner?: string
   }
 }
 
@@ -18,6 +20,9 @@ export const BlogForm: FC<BlogFormProps> = ({ onSubmit, data }) => {
         <h1 className="text-2xl font-semibold">BLOG</h1>
         <Button type="submit">Submit</Button>
       </div>
+
+
+      <BannerInput image_url={data?.banner} />
 
 
       <div>
@@ -32,6 +37,7 @@ export const BlogForm: FC<BlogFormProps> = ({ onSubmit, data }) => {
       </div>
 
       <SubtitleInput subtitle={data?.subtitle} />
+
 
       <div className="mt-4">
         <Label className="mb-4" htmlFor="content">Content</Label>

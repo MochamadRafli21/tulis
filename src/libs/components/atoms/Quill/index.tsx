@@ -35,7 +35,6 @@ export const Quill = (
 
 
   const customImageHandler = () => {
-    console.log('image handler active')
     if (!quillRef.current) {
       console.error("Quill ref is not defined");
       return;

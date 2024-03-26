@@ -8,11 +8,13 @@ export async function createBlog(formData: FormData) {
   const title = formData.get("title")
   const content = formData.get("content")
   const subtitle = formData.get("subtitle")
+  const banner = formData.get("banner")
 
   const blog = BlogSchema.parse({
     title: title as string,
     content: content as string,
-    subtitle: subtitle as string
+    subtitle: subtitle as string,
+    banner: banner as string
   })
 
   try {
@@ -33,14 +35,14 @@ export async function editBlog(id: string, formData: FormData) {
   const title = formData.get("title")
   const content = formData.get("content")
   const subtitle = formData.get("subtitle")
-  console.log(title, content, subtitle)
+  const banner = formData.get("banner")
 
   const blog = BlogSchema.parse({
     title: title as string,
     content: content as string,
-    subtitle: subtitle as string
+    subtitle: subtitle as string,
+    banner: banner as string
   })
-
 
   try {
     await updateBlog(id, blog)
@@ -85,7 +87,6 @@ export async function getBlogBySlug(slug: string) {
 export async function getBlogDetail(id: string) {
   try {
     const data = await getBlogById(id)
-    console.log(data)
     return data
   } catch (error) {
     console.log(error) // TODO: handle error

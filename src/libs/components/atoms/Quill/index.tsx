@@ -18,7 +18,8 @@ const uploadFile = async (file: File) => {
     }
   );
   const data2 = await res.json();
-  return data2.secure_url;
+  console.log(data2);
+  return data2.imageUrl;
 };
 
 const customImageHandler = () => {
@@ -31,7 +32,7 @@ const customImageHandler = () => {
     const file = input.files[0];
     try {
       const link = await uploadFile(file);
-      this.quill.insertEmbed(this.quill.getSelection(), "image", link);
+      this?.quill.insertEmbed(this?.quill.getSelection(), "image", link);
     } catch (err) {
       console.log("upload err:", err);
     }

@@ -1,15 +1,15 @@
-"use server"
-
-import { v2 as cloudinary } from 'cloudinary'
-
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-})
-
+import { cloudinaryClient } from '@/libs/utils'
 
 export const uploadImage = async (image: File) => {
-  const data = await cloudinary.uploader.upload(image)
-  return data.secure_url
+  const arrayBuffer = await image.arrayBuffer()
+  const fileStream = Buffer.from(arrayBuffer)
+  return new Promise((resolve, reject) => cloudinaryClient.uploader.upload_stream({ "resource_type": "auto" },
+    (error, result) => {
+      if (error) {
+        reject(error)
+      } else {
+        resolve(result?.secure_url)
+      }
+    }).end(fileStream)
+  )
 }

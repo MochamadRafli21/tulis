@@ -1,11 +1,13 @@
 import { FC } from "react"
-import { Quill, Label, Button, Input } from "../atoms"
+import { Quill, Label, Button, TextArea } from "../atoms"
+import SubtitleInput from "../molecules/SubtitleInput"
 
 interface BlogFormProps {
   onSubmit: (e: any) => void,
   data?: {
     title?: string,
     content?: string
+    subtitle?: string
   }
 }
 
@@ -16,16 +18,21 @@ export const BlogForm: FC<BlogFormProps> = ({ onSubmit, data }) => {
         <h1 className="text-2xl font-semibold">BLOG</h1>
         <Button type="submit">Submit</Button>
       </div>
+
+
       <div>
         <Label htmlFor="title">Title</Label>
-        <Input
+        <TextArea
           inputSize={"xl"}
           placeholder="Mobil Untuk Masa Depan"
-          type="text"
+          rows={1}
           defaultValue={data?.title}
           name="title"
         />
       </div>
+
+      <SubtitleInput subtitle={data?.subtitle} />
+
       <div className="mt-4">
         <Label className="mb-4" htmlFor="content">Content</Label>
         <Quill name="content" className="min-h-[300px]" content={data?.content} />

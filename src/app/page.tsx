@@ -1,5 +1,5 @@
 import { getBlogList } from "@/app/actions";
-import { Button, QuilContent } from "@/libs/components/atoms";
+import { Button } from "@/libs/components/atoms";
 import Link from "next/link"
 
 
@@ -21,11 +21,11 @@ export default async function Home() {
       <div className="max-w-5xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
         {
           blogs?.map((blog: any) => (
-            <div className="px-2 py-1 " key={blog.id}>
-              <Link href={`/blog/${blog.id}`}>
+            <div className="px-2 py-1 " key={blog.slug}>
+              <Link href={`/blog/${blog.slug}`}>
                 <h1 className="text-2xl font-semibold text-black">{blog.title}</h1>
+                <p className="text-gray-500">{blog.subtitle}</p>
               </Link>
-              <QuilContent className="mt-2 line-clamp-3 text-gray-500" content={blog.content} />
             </div>
           ))
         }

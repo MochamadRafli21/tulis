@@ -1,17 +1,17 @@
-import { editBlog, getBlogById } from "@/app/actions";
+import { editBlog, getBlogDetail } from "@/app/actions";
 import { BlogForm } from "@/libs/components";
 import { redirect } from "next/navigation";
 
-export default async function BlogAdd({ params }: {
+export default async function BlogUpdate({ params }: {
   params: {
-    id: string
+    slug: string
   }
 }) {
 
-  const id = params.id
+  const id = params.slug
 
   const getData = async () => {
-    const data = await getBlogById(id)
+    const data = await getBlogDetail(id)
     return data
   }
 
@@ -27,7 +27,8 @@ export default async function BlogAdd({ params }: {
   return (
     <main className="flex min-h-screen bg-secondary-100 flex-col items-center justify-between p-2 md:px-24">
       <div className="bg-white min-h-screen w-full max-w-3xl justify-center md:p-4 text-sm lg:flex">
-        <BlogForm onSubmit={onSubmit} data={{ title: blog?.title, content: blog?.content }} />
+        <BlogForm onSubmit={onSubmit}
+          data={{ title: blog?.title, content: blog?.content, subtitle: blog?.subtitle ?? '' }} />
       </div>
     </main>
   )

@@ -1,17 +1,17 @@
-import { getBlogById } from "@/app/actions";
+import { getBlogBySlug } from "@/app/actions";
 import { Button, QuilContent } from "@/libs/components/atoms";
 import Link from "next/link"
 
-export default async function BlogAdd({ params }: {
+export default async function BlogDetail({ params }: {
   params: {
-    id: string
+    slug: string
   }
 }) {
 
-  const id = params.id
+  const slug = params.slug
 
   const getData = async () => {
-    const data = await getBlogById(id)
+    const data = await getBlogBySlug(slug)
     return data
   }
 
@@ -21,7 +21,7 @@ export default async function BlogAdd({ params }: {
     <main className="flex min-h-screen flex-col items-center">
       <div className="w-full flex justify-between items-center rounded-lg border border-gray-300 shadow px-4 py-2 mb-4">
         <h1 className="text-2xl font-semibold">BLOG</h1>
-        <Link href={`/blog/${id}/edit`}>
+        <Link href={`/blog/${blog?.id}/edit`}>
           <Button variant="secondary" type="submit">Edit Blog</Button>
         </Link>
       </div>

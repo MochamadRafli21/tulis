@@ -75,6 +75,7 @@ export const getBlogById = async (id: string) => {
 export const getBlogs = async (page?: number, pageSize?: number) => {
   if (!page) page = 1;
   if (!pageSize) pageSize = 10;
+  console.log(page, pageSize)
 
   const data = await db
     .select()

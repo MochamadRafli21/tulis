@@ -65,9 +65,9 @@ export async function removeBlog(id: string) {
   }
 }
 
-export async function getBlogList() {
+export async function getBlogList(page = 1, pageSize = 10) {
   try {
-    const data = await getBlogs()
+    const data = await getBlogs(page, pageSize)
     return data
   } catch (error) {
     console.log(error) // TODO: handle error

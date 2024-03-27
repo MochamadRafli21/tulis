@@ -72,11 +72,16 @@ export const getBlogById = async (id: string) => {
   return data[0];
 }
 
-export const getBlogs = async () => {
+export const getBlogs = async (page?: number, pageSize?: number) => {
+  if (!page) page = 1;
+  if (!pageSize) pageSize = 10;
+
   const data = await db
     .select()
     .from(blog)
     .where(eq(blog.is_published, true))
+    .limit(pageSize)
+    .offset((page - 1) * pageSize)
     .orderBy(desc(blog.id));
 
   if (data.length > 0) {

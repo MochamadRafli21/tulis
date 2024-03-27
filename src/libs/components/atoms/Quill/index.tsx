@@ -29,7 +29,7 @@ const CustomReactQuill = dynamic(
 
 
 export const Quill = (
-  { className, name, content }: { className?: string, name?: string, content?: string }) => {
+  { className, name, content, readOnly }: { className?: string, name?: string, content?: string, readOnly?: boolean }) => {
   const [value, setValue] = useState(content ?? "");
   const quillRef = useRef<ReactQuill>(null);
 
@@ -88,10 +88,11 @@ export const Quill = (
       <CustomReactQuill
         forwadedRef={quillRef}
         theme="snow"
+        readOnly={readOnly}
         value={value}
         onChange={setValue}
         className={
-          cn(["h-[300px]", className])
+          cn([className])
         }
         modules={modules}
         formats={[

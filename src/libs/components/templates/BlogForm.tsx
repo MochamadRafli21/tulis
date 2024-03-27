@@ -16,7 +16,7 @@ interface BlogFormProps {
 export const BlogForm: FC<BlogFormProps> = ({ onSubmit, data }) => {
   return (
     <form action={onSubmit}>
-      <div className="w-full flex justify-between items-center rounded-lg border border-gray-300 shadow px-4 py-2 mb-4">
+      <div className="w-full mb-12 flex justify-between items-center rounded-lg border border-gray-300 shadow px-4 py-2">
         <h1 className="text-2xl font-semibold">BLOG</h1>
         <Button type="submit">Submit</Button>
       </div>
@@ -25,7 +25,7 @@ export const BlogForm: FC<BlogFormProps> = ({ onSubmit, data }) => {
       <BannerInput image_url={data?.banner} />
 
 
-      <div>
+      <div className="mt-8">
         <Label htmlFor="title">Title</Label>
         <TextArea
           inputSize={"xl"}
@@ -33,15 +33,18 @@ export const BlogForm: FC<BlogFormProps> = ({ onSubmit, data }) => {
           rows={1}
           defaultValue={data?.title}
           name="title"
+          className="mt-2"
         />
       </div>
 
-      <SubtitleInput subtitle={data?.subtitle} />
-
-
       <div className="mt-4">
+        <SubtitleInput subtitle={data?.subtitle} />
+      </div>
+
+
+      <div className="mt-4 bg-white h-fit">
         <Label className="mb-4" htmlFor="content">Content</Label>
-        <Quill name="content" className="min-h-[300px]" content={data?.content} />
+        <Quill name="content" readOnly={false} className="min-h-[300px]" content={data?.content} />
       </div>
     </form>
   )

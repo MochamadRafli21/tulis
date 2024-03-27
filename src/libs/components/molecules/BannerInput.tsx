@@ -16,11 +16,17 @@ export default function BannerInput({ image_url }: { image_url?: string }) {
     <>
       <SetDisplay defaultOn={!!image_url}>
         <SetDisplay.ShowContent>
-          <div>
+          <div className='aspect-auto rounded box-content items-center justify-center flex'>
             {value ?
-              <Image src={value} alt="banner" width={800} height={200} className='w-full h-[200px] rounded border border-gray-300' />
+              <Image
+                src={value}
+                alt="banner"
+                width={300}
+                height={200}
+                className='rounded object-contain h-[200px]'
+              />
               :
-              <Label htmlFor="image_url" className='z-10 h-[200px] rounded border border-gray-300 hover:bg-gray-600'>
+              <Label htmlFor="image_url" className='z-10 p-4 rounded border border-gray-300 hover:bg-gray-600'>
                 <UploadPreview />
               </Label>
             }
@@ -28,7 +34,7 @@ export default function BannerInput({ image_url }: { image_url?: string }) {
             <input id="banner" type="text" name="banner" className='hidden' defaultValue={value} />
           </div>
           <SetDisplay.ToggleDisplay onClick={() => setValue("")}>
-            <Button className="mt-2 w-full" variant={"danger"}>Remove Banner</Button>
+            <Button className="mt-4 w-full" variant={"danger"}>Remove Banner</Button>
           </SetDisplay.ToggleDisplay>
         </SetDisplay.ShowContent>
 

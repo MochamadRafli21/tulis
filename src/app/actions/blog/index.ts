@@ -9,12 +9,11 @@ export async function createBlog(formData: FormData) {
   const content = formData.get("content")
   const subtitle = formData.get("subtitle")
   const banner = formData.get("banner")
-
   const blog = BlogSchema.parse({
     title: title as string,
     content: content as string,
     subtitle: subtitle as string,
-    banner: banner as string
+    banner: banner ? banner as string : ''
   })
 
   try {

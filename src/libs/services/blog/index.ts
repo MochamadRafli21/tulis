@@ -5,19 +5,34 @@ import { blog } from "@/libs/database/schema";
 import { Blog } from "@/libs/zod/schema";
 import { eq, desc } from "drizzle-orm";
 import DOMPurify from "isomorphic-dompurify";
+import { generateSlug } from "@/libs/utils";
 
-export const storeBlog = async ({ title, content, is_published }: Blog) => {
+export const storeBlog = async ({ title, content, is_published, subtitle, banner }: Blog) => {
   const data = await db
     .insert(blog)
-    .values({ title, content, is_published })
+    .values({
+      title,
+      content,
+      is_published,
+      slug: generateSlug(title),
+      subtitle: subtitle ?? '',
+      banner: banner ?? ''
+    })
     .returning();
   return data[0];
 }
 
-export const updateBlog = async (id: string, { title, content, is_published }: Blog) => {
+export const updateBlog = async (id: string, { title, content, is_published, subtitle, banner }: Blog) => {
   const data = await db
     .update(blog)
-    .set({ title, content, is_published })
+    .set({
+      title,
+      content,
+      is_published,
+      slug: generateSlug(title),
+      subtitle: subtitle ?? '',
+      banner: banner ?? ''
+    })
     .where(eq(blog.id, id))
     .returning();
   return data[0];
@@ -31,7 +46,20 @@ export const destroyBlog = async (id: string) => {
   return data[0];
 }
 
-export const getBlog = async (id: string) => {
+export const getBlogPublic = async (slug: string) => {
+  const data = await db
+    .select()
+    .from(blog)
+    .where(eq(blog.slug, slug))
+    .limit(1);
+
+  if (data.length > 0) {
+    data[0].content = DOMPurify.sanitize(data[0].content);
+  }
+  return data[0];
+}
+
+export const getBlogById = async (id: string) => {
   const data = await db
     .select()
     .from(blog)
@@ -48,6 +76,7 @@ export const getBlogs = async () => {
   const data = await db
     .select()
     .from(blog)
+    .where(eq(blog.is_published, true))
     .orderBy(desc(blog.id));
 
   if (data.length > 0) {

@@ -1,16 +1,19 @@
 "use server"
 
 import { BlogSchema } from "@/libs/zod/schema"
-import { storeBlog, updateBlog, getBlog, destroyBlog, getBlogs } from "@/libs/services/blog"
+import { storeBlog, updateBlog, getBlogPublic, getBlogById, destroyBlog, getBlogs } from "@/libs/services/blog"
 import { revalidatePath } from "next/cache"
 
 export async function createBlog(formData: FormData) {
   const title = formData.get("title")
   const content = formData.get("content")
-
+  const subtitle = formData.get("subtitle")
+  const banner = formData.get("banner")
   const blog = BlogSchema.parse({
     title: title as string,
-    content: content as string
+    content: content as string,
+    subtitle: subtitle as string,
+    banner: banner ? banner as string : ''
   })
 
   try {
@@ -23,24 +26,26 @@ export async function createBlog(formData: FormData) {
 
 export async function editBlog(id: string, formData: FormData) {
   try {
-    await getBlog(id)
+    await getBlogById(id)
   } catch (error) {
     throw new Error("Blog not found") // TODO: handle error
   }
 
   const title = formData.get("title")
   const content = formData.get("content")
+  const subtitle = formData.get("subtitle")
+  const banner = formData.get("banner")
 
   const blog = BlogSchema.parse({
     title: title as string,
-    content: content as string
+    content: content as string,
+    subtitle: subtitle as string,
+    banner: banner as string
   })
-
-  revalidatePath("/")
-  revalidatePath("/blog/[id]")
 
   try {
     await updateBlog(id, blog)
+    revalidatePath("/")
   } catch (error) {
     console.log(error) // TODO: handle error
   }
@@ -48,14 +53,15 @@ export async function editBlog(id: string, formData: FormData) {
 
 export async function removeBlog(id: string) {
   try {
-    await getBlog(id)
+    await getBlogById(id)
   } catch (error) {
     throw new Error("Blog not found") // TODO: handle error
   }
   try {
     await destroyBlog(id)
+    revalidatePath("/")
   } catch (error) {
-    console.log(error) // TODO: handle error
+    throw new Error("Failed To Delete Blog") // TODO: handle error
   }
 }
 
@@ -68,9 +74,18 @@ export async function getBlogList() {
   }
 }
 
-export async function getBlogById(id: string) {
+export async function getBlogBySlug(slug: string) {
   try {
-    const data = await getBlog(id)
+    const data = await getBlogPublic(slug)
+    return data
+  } catch (error) {
+    console.log(error) // TODO: handle error
+  }
+}
+
+export async function getBlogDetail(id: string) {
+  try {
+    const data = await getBlogById(id)
     return data
   } catch (error) {
     console.log(error) // TODO: handle error

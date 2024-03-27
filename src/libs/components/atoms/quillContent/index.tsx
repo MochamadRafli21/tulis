@@ -11,6 +11,8 @@ interface ContentProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export const QuilContent = ({ content, className }: ContentProps) => {
   return (
-    <div className={cn(className)} dangerouslySetInnerHTML={{ __html: content }} />
+    <div className='ql-container ql-snow !border-none'>
+      <div className={cn("ql-editor", className)} dangerouslySetInnerHTML={{ __html: content }} />
+    </div>
   )
 }

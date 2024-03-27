@@ -5,7 +5,7 @@ import BlogList from "@/libs/components/molecules/BlogList";
 
 export default async function Home() {
   const getData = async () => {
-    const data = await getBlogList()
+    const data = await getBlogList(1)
     const mappedBlogs = data?.map((blog) => {
       return {
         title: blog.title,

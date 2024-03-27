@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Blog } from "@/libs/zod/schema";
 import { getBlogs } from "@/libs/services/blog";
-import { Button } from "@/libs/components/atoms";
+import { IntersectionContainer } from "@/libs/components/atoms";
 import Card from "@/libs/components/molecules/Card";
 import Link from "next/link"
 import Image from "next/image";
@@ -56,8 +56,8 @@ export default function BlogList({ initialBlogs, isNext }: { initialBlogs: itemL
           </Card>
         )
       })}
-      {is_done ? <p>No more blogs</p> :
-        <Button onClick={loadMoreBlog} className="w-full">Load More</Button>
+      {is_done ? '' :
+        <IntersectionContainer onView={loadMoreBlog} />
       }
     </div>
   );

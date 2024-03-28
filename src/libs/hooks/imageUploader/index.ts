@@ -3,7 +3,7 @@ export const uploadFile = async (file: File) => {
   data.append("file", file);
   data.append("upload_preset", "nextjs-blog");
   const res = await fetch(
-    "http://localhost:3000/api/images",
+    "/api/images",
     {
       method: "POST",
       body: data,

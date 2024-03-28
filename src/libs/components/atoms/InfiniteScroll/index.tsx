@@ -15,7 +15,6 @@ function InfiniteScroll({ currentPage, onUpdate, children }: {
   const loadMoreData = async () => {
     if (onUpdate) {
       const isDataFinal = await onUpdate(page)
-      console.log(isDataFinal)
       if (isDataFinal) {
         setDone(true)
         return

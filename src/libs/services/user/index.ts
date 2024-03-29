@@ -3,7 +3,7 @@
 import { db } from "@/libs/database";
 import { user } from "@/libs/database/schema";
 import { eq } from "drizzle-orm";
-import { CreateUser, User } from "@/libs/zod/schema";
+import { CreateUser, EditUser } from "@/libs/zod/schema";
 
 export const storeUser = async ({ name, email, password }: CreateUser) => {
   const data = await db
@@ -17,7 +17,7 @@ export const storeUser = async ({ name, email, password }: CreateUser) => {
   return data[0];
 }
 
-export const updateUser = async (id: string, { name, avatar, banner, bio }: User) => {
+export const updateUser = async (id: string, { name, avatar, banner, bio }: EditUser) => {
   const data = await db
     .update(user)
     .set({
@@ -49,6 +49,14 @@ export const getUserById = async (id: string) => {
     .limit(1);
 
   return data[0];
+}
+
+export const getUserByEmail = async (email: string) => {
+  const data = await db.query.user.findFirst({
+    where: (user, { eq }) => (eq(user.email, email)),
+  })
+
+  return data;
 }
 
 export const getUserList = async () => {

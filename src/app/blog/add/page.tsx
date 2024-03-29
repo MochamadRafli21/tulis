@@ -1,8 +1,13 @@
 import { createBlog } from "@/app/actions";
 import { redirect } from "next/navigation";
 import { BlogForm } from "@/libs/components";
-
+import { getSession } from "@/libs/utils";
 export default function BlogAdd() {
+
+  const session = getSession()
+  if (!session) {
+    redirect("/")
+  }
 
   const onSubmit = async (e: any) => {
     "use server"

@@ -1,12 +1,17 @@
 import { editBlog, getBlogDetail } from "@/app/actions";
 import { BlogForm } from "@/libs/components";
 import { redirect } from "next/navigation";
+import { getSession } from "@/libs/utils";
 
 export default async function BlogUpdate({ params }: {
   params: {
     slug: string
   }
 }) {
+  const session = getSession()
+  if (!session) {
+    redirect("/")
+  }
 
   const id = params.slug
 

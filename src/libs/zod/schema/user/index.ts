@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export type CreateUser = z.infer<typeof CreateUserSchema>;
 export type User = z.infer<typeof UserResponse>;
+export type EditUser = z.infer<typeof EditUserSchema>;
 
 export const CreateUserSchema = z.object({
   name: z.string().nonempty({ message: "Name cannot be empty" }),
@@ -25,4 +26,11 @@ export const UserResponse = z.object({
   created_at: z.string(),
   updated_at: z.string(),
   is_verified: z.boolean(),
+});
+
+export const EditUserSchema = z.object({
+  name: z.string().nonempty({ message: "Name cannot be empty" }),
+  bio: z.string(),
+  banner: z.string(),
+  avatar: z.string(),
 });

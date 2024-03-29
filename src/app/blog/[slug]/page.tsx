@@ -2,12 +2,15 @@ import { getBlogBySlug } from "@/app/actions";
 import { Button, QuilContent } from "@/libs/components/atoms";
 import Link from "next/link"
 import Image from "next/image"
+import { getSession } from "@/libs/utils";
 
 export default async function BlogDetail({ params }: {
   params: {
     slug: string
   }
 }) {
+
+  const session = getSession()
 
   const slug = params.slug
 
@@ -22,9 +25,11 @@ export default async function BlogDetail({ params }: {
     <main className="flex min-h-screen flex-col items-center">
       <div className="w-full flex justify-between items-center rounded-lg border border-gray-300 shadow px-4 py-2 mb-4">
         <h1 className="text-2xl font-semibold">BLOG</h1>
-        <Link href={`/blog/${blog?.id}/edit`}>
-          <Button variant="secondary" type="submit">Edit Blog</Button>
-        </Link>
+        {session &&
+          <Link href={`/blog/${blog?.id}/edit`}>
+            <Button variant="secondary" type="submit">Edit Blog</Button>
+          </Link>
+        }
       </div>
 
       <div className="p-8 max-w-5xl w-full lg:w-3/5">

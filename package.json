@@ -8,15 +8,19 @@
     "start": "next start",
     "lint": "next lint",
     "db:generate": "drizzle-kit generate:pg --schema=./src/libs/database/schema/index.ts",
-    "db:push": "bun run tsx src/libs/database/migrate.ts"
+    "db:push": "bun run tsx src/libs/database/migrate.ts",
+    "db:seed": "bun run tsx src/libs/database/seed/index.ts"
   },
   "dependencies": {
+    "argon2": "^0.40.1",
     "class-variance-authority": "^0.7.0",
     "cloudinary": "^2.0.3",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.30.4",
     "html-entities": "^2.5.2",
     "isomorphic-dompurify": "^2.6.0",
+    "jose": "^5.2.3",
+    "lucide-react": "^0.363.0",
     "nanoid": "^5.0.6",
     "next": "latest",
     "pg": "^8.11.3",

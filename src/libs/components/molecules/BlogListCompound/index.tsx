@@ -15,31 +15,27 @@ export default function BlogListCompound() {
 
   const getMoreData = async (page: number) => {
     const res = async () => {
-      const apiBlogs = await getBlogs(page, 1)
-      if (apiBlogs.length === 0) {
-        return true
-      }
-      apiBlogs.forEach((blog) => {
-        setBlogs([...blogs, {
-          title: blog.title,
-          id: blog.id,
-          subtitle: blog.subtitle ?? '',
-          content: blog.content,
-          banner: blog.banner,
-          slug: blog.slug,
-          is_published: blog.is_published ?? false
-        }])
-      })
-      return false
+      const apiBlogs = await getBlogs(page)
+      return apiBlogs
     }
-    return await res()
-
+    const data = await res()
+    if (!data) return false
+    const mappedData: itemList[] = data.map((blog) => {
+      return {
+        title: blog.title,
+        subtitle: blog.subtitle ?? "",
+        banner: blog.banner ?? "",
+        slug: blog.slug,
+      } as itemList
+    })
+    setBlogs([...blogs, ...mappedData])
+    return true
   }
   return (
     <InfiniteScroll currentPage={1} onUpdate={getMoreData}>
       {blogs.map((blog) => {
         return (
-          <Card className="px-4 mb-3 py-2 break-inside-avoid h-fit horver:bg-gray-100" key={blog.id}>
+          <Card className="px-4 mb-3 py-2 break-inside-avoid h-fit horver:bg-gray-100" key={blog.slug}>
             <Link href={`/blog/${blog.slug}`}>
               {blog.banner &&
                 <div className="relative w-full h-[150px]">

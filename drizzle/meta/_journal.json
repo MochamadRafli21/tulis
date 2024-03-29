@@ -22,6 +22,20 @@
       "when": 1711473266383,
       "tag": "0002_mushy_jetstream",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1711634861411,
+      "tag": "0003_breezy_malcolm_colcord",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1711739028180,
+      "tag": "0004_amusing_hawkeye",
+      "breakpoints": true
     }
   ]
 }

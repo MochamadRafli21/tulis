@@ -24,12 +24,12 @@ export async function getCurrentUser() {
       throw new Error("User not found")
     }
 
-    const token = await verifyToken(session)
-    if (!token) {
+    const { id } = await verifyToken(session)
+    if (!id) {
       throw new Error("User not found")
     }
 
-    const data = await getUserById(token.id)
+    const data = await getUserById(id)
     if (!data) {
       throw new Error("User not found")
     }

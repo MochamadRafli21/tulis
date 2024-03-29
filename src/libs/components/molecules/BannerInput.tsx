@@ -16,7 +16,7 @@ export default function BannerInput({ image_url }: { image_url?: string }) {
     <>
       <SetDisplay defaultOn={!!image_url}>
         <SetDisplay.ShowContent>
-          <div className='aspect-auto h-48 w-96 rounded box-content items-center justify-center flex'>
+          <div className='aspect-auto h-48 w-full rounded box-content items-center justify-center flex'>
             {value ?
               <Image
                 src={value}

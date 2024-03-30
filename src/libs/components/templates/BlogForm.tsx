@@ -1,5 +1,6 @@
 import { FC } from "react"
-import { Quill, Label, Button, TextArea } from "../atoms"
+import { Quill, Label, TextArea } from "../atoms"
+import { SubmitButton } from "../molecules"
 import SubtitleInput from "../molecules/SubtitleInput"
 import BannerInput from "../molecules/BannerInput"
 
@@ -24,17 +25,17 @@ export const BlogForm: FC<BlogFormProps> = ({ onSubmit, onDelete, data }) => {
           {
             onDelete &&
             <form id="deleteForm" action={onDelete} >
-              <Button className="flex items-center gap-2" form="deleteForm" variant={"danger"} type="submit">
+              <SubmitButton className="flex items-center text-center gap-2 w-24" form="deleteForm" variant={"danger"} type="submit">
                 <X size={20} color="red" />
                 Delete
-              </Button>
+              </SubmitButton>
             </form>
 
           }
-          <Button className="flex items-center gap-2" form="submitForm" type="submit">
+          <SubmitButton className="flex items-center gap-2 w-24 text-center" form="submitForm" type="submit">
             <Save size={20} color="white" />
             Submit
-          </Button>
+          </SubmitButton>
 
         </div>
       </div>

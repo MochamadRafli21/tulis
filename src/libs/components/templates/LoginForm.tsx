@@ -1,5 +1,6 @@
 import { FC } from "react"
-import { Label, Button, Input } from "../atoms"
+import { Label, Input } from "../atoms"
+import { SubmitButton } from "../molecules"
 
 interface LoginFormProps {
   onSubmit: (e: any) => void,
@@ -38,7 +39,7 @@ export const LoginForm: FC<LoginFormProps> = ({ onSubmit, data }) => {
         />
       </div>
 
-      <Button className="mt-4 w-full" type="submit">Submit</Button>
+      <SubmitButton className="mt-4 w-full" type="submit">Submit</SubmitButton>
     </form>
   )
 }

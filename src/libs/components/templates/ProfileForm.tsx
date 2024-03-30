@@ -1,8 +1,9 @@
 import { FC } from "react"
-import { Label, Button, Input, Quill } from "../atoms"
+import { Label, Input, Quill } from "../atoms"
 import ImageUpload from "../molecules/ImageUpload"
 import Image from "next/image"
 import { ImageUpIcon } from "lucide-react"
+import { SubmitButton } from "../molecules"
 
 interface ProfileFormProps {
   onSubmit: (e: any) => void,
@@ -72,7 +73,7 @@ export const ProfileForm: FC<ProfileFormProps> = ({ onSubmit, data }) => {
         />
       </div>
 
-      <Button className="mt-4 w-full" type="submit">Submit</Button>
+      <SubmitButton className="mt-4 w-full" type="submit">Submit</SubmitButton>
     </form>
   )
 }

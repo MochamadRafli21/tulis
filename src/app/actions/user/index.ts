@@ -2,7 +2,8 @@
 import { getUserById, getUserList, updateUser } from "@/libs/services/user"
 import { verifyToken } from "@/libs/services"
 import { getSession } from "@/libs/utils"
-import { EditUserSchema } from "@/libs/zod/schema"
+import { EditUserSchema, EditUserResponse } from "@/libs/zod/schema"
+import { ZodError } from "zod"
 
 export async function getUser() {
   try {
@@ -39,26 +40,69 @@ export async function getCurrentUser() {
   }
 }
 
-export async function updateProfile(formData: FormData) {
-  const name = formData.get("name")
-  const avatar = formData.get("avatar")
-  const bio = formData.get("bio")
-  const banner = formData.get("banner")
+export async function updateProfile(prevData: EditUserResponse, formData: FormData)
+  : Promise<EditUserResponse> {
+  const name = formData.get("name") as string;
+  const avatar = formData.get("avatar") as string;
+  const bio = formData.get("bio") as string;
+  const banner = formData.get("banner") as string;
 
   try {
     const session = getSession()
     if (!session) {
-      throw new Error("User not found")
+      return {
+        "errors": {
+          "name": "",
+          "avatar": "",
+          "bio": "",
+          "banner": ""
+        },
+        "message": "Failed To Get User Data",
+        "data": {
+          "name": name,
+          "avatar": avatar,
+          "bio": bio,
+          "banner": banner
+        }
+      }
     }
 
     const token = await verifyToken(session)
     if (!token) {
-      throw new Error("User not found")
+      return {
+        "errors": {
+          "name": "",
+          "avatar": "",
+          "bio": "",
+          "banner": ""
+        },
+        "message": "Failed To Get User Data",
+        "data": {
+          "name": name,
+          "avatar": avatar,
+          "bio": bio,
+          "banner": banner
+        }
+      }
     }
 
     const data = await getUserById(token.id)
     if (!data) {
-      throw new Error("User not found")
+      return {
+        "errors": {
+          "name": "",
+          "avatar": "",
+          "bio": "",
+          "banner": ""
+        },
+        "message": "Failed To Get User Data",
+        "data": {
+          "name": name,
+          "avatar": avatar,
+          "bio": bio,
+          "banner": banner
+        }
+      }
     }
     const payload = EditUserSchema.parse({
       name: name as string,
@@ -69,9 +113,34 @@ export async function updateProfile(formData: FormData) {
 
     const user = await updateUser(data.id, payload)
 
-    return user
+    return {
+      "errors": undefined,
+      "message": "Profile updated successfully",
+      "data": {
+        "name": user.name,
+        "avatar": user.avatar as string,
+        "bio": user.bio as string,
+        "banner": user.banner as string
+      }
+    }
   } catch (error) {
-    console.log(error) // TODO: handle error
+    const zodError = error as ZodError
+    const errorMap = zodError.flatten().fieldErrors
+    return {
+      "errors": {
+        "name": errorMap.name?.[0] ?? "",
+        "avatar": errorMap.avatar?.[0] ?? "",
+        "bio": errorMap.bio?.[0] ?? "",
+        "banner": errorMap.banner?.[0] ?? ""
+      },
+      "message": "Failed to update profile",
+      "data": {
+        name,
+        avatar,
+        bio,
+        banner
+      }
+    }
   }
 }
 

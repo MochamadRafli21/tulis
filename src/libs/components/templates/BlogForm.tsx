@@ -1,12 +1,18 @@
-import { FC } from "react"
+"use client"
+
 import { Quill, Label, TextArea } from "../atoms"
 import { SubmitButton } from "../molecules"
 import SubtitleInput from "../molecules/SubtitleInput"
 import BannerInput from "../molecules/BannerInput"
+import { BlogResponse } from "@/libs/zod/schema"
 
 import { Save, X } from "lucide-react"
+import { useEffect, FC } from "react"
+import { useRouter } from "next/navigation"
+import { useFormState } from "react-dom"
+
 interface BlogFormProps {
-  onSubmit: (e: any) => void,
+  onSubmit: (p: BlogResponse, e: FormData) => Promise<BlogResponse>,
   onDelete?: (e: any) => void,
   data?: {
     title?: string,
@@ -17,6 +23,24 @@ interface BlogFormProps {
 }
 
 export const BlogForm: FC<BlogFormProps> = ({ onSubmit, onDelete, data }) => {
+  const router = useRouter()
+  const [formState, formAction] = useFormState(onSubmit, {
+    message: "",
+    errors: undefined,
+    data: {
+      title: data?.title ?? "",
+      content: data?.content ?? "",
+      subtitle: data?.subtitle ?? "",
+      banner: data?.banner ?? ""
+    }
+  })
+
+  useEffect(() => {
+    if (!formState.errors && formState.message) {
+      router.push("/")
+    }
+  }, [formState])
+
   return (
     <>
       <div className="z-20 fixed top-0 left-0 bg-white w-full mb-12 flex justify-between items-center rounded-lg border border-gray-300 shadow px-4 py-2">
@@ -39,7 +63,7 @@ export const BlogForm: FC<BlogFormProps> = ({ onSubmit, onDelete, data }) => {
 
         </div>
       </div>
-      <form id="submitForm" action={onSubmit}>
+      <form id="submitForm" action={formAction}>
 
         <div className="w-full h-20"></div>
 
@@ -56,7 +80,12 @@ export const BlogForm: FC<BlogFormProps> = ({ onSubmit, onDelete, data }) => {
             defaultValue={data?.title}
             name="title"
             className="mt-2"
+            variant={formState.errors?.title ? "danger" : "primary"}
           />
+          {
+            formState.errors?.title &&
+            <p className="text-xs text-red-500">{formState.errors?.title}</p>
+          }
         </div>
 
         <div className="mt-4">
@@ -66,7 +95,16 @@ export const BlogForm: FC<BlogFormProps> = ({ onSubmit, onDelete, data }) => {
 
         <div className="mt-4 bg-white h-fit">
           <Label className="mb-4" htmlFor="content">Content</Label>
-          <Quill name="content" readOnly={false} className="min-h-[300px]" content={data?.content} />
+          {
+            formState.errors?.title &&
+            <p className="my-4 text-xs text-red-500">{formState.errors?.content}</p>
+          }
+          <Quill
+            name="content"
+            readOnly={false}
+            className={"min-h-[300px] " + (formState.errors?.content ? "h-fit border border-red-500" : "")}
+            content={data?.content}
+          />
         </div>
       </form>
     </>

@@ -1,9 +1,15 @@
-import { FC } from "react"
+"use client"
+
 import { Label, Input } from "../atoms"
 import { SubmitButton } from "../molecules"
+import { LoginResponse } from "@/libs/zod/schema"
+
+import { FC, useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { useFormState } from "react-dom"
 
 interface LoginFormProps {
-  onSubmit: (e: any) => void,
+  onSubmit: (prevState: LoginResponse, e: FormData) => Promise<LoginResponse>,
   data?: {
     email?: string,
     password?: string
@@ -11,10 +17,25 @@ interface LoginFormProps {
 }
 
 export const LoginForm: FC<LoginFormProps> = ({ onSubmit, data }) => {
+  const router = useRouter()
+  const [formState, formAction] = useFormState(onSubmit, {
+    message: "",
+    errors: undefined,
+    data: {
+      email: "",
+      password: "",
+      access_token: "",
+    }
+  })
+
+  useEffect(() => {
+    if (!formState.errors && formState.message) {
+      router.push("/")
+    }
+  }, [formState])
+
   return (
-    <form action={onSubmit}>
-
-
+    <form action={formAction}>
       <div className="mt-4">
         <Label htmlFor="email">Email</Label>
         <Input
@@ -25,6 +46,10 @@ export const LoginForm: FC<LoginFormProps> = ({ onSubmit, data }) => {
           type="email"
           className="mt-2"
         />
+        {
+          formState.errors?.email &&
+          <p className="text-xs text-red-500">{formState.errors?.email}</p>
+        }
       </div>
 
       <div className="mt-4">
@@ -37,6 +62,10 @@ export const LoginForm: FC<LoginFormProps> = ({ onSubmit, data }) => {
           name="password"
           className="mt-2"
         />
+        {
+          formState.errors?.password &&
+          <p className="text-xs text-red-500">{formState.errors?.password}</p>
+        }
       </div>
 
       <SubmitButton className="mt-4 w-full" type="submit">Submit</SubmitButton>

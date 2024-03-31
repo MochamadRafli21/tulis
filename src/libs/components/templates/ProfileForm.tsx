@@ -1,12 +1,18 @@
-import { FC } from "react"
+"use client"
+
 import { Label, Input, Quill } from "../atoms"
 import ImageUpload from "../molecules/ImageUpload"
+import { SubmitButton } from "../molecules"
+import { EditUserResponse } from "@/libs/zod/schema"
+
+import { FC, useEffect } from "react"
 import Image from "next/image"
 import { ImageUpIcon } from "lucide-react"
-import { SubmitButton } from "../molecules"
+import { useFormState } from "react-dom"
+import { useRouter } from "next/navigation"
 
 interface ProfileFormProps {
-  onSubmit: (e: any) => void,
+  onSubmit: (prevState: EditUserResponse, e: FormData) => Promise<EditUserResponse>,
   data?: {
     email?: string,
     name?: string,
@@ -17,8 +23,26 @@ interface ProfileFormProps {
 }
 
 export const ProfileForm: FC<ProfileFormProps> = ({ onSubmit, data }) => {
+  const router = useRouter()
+  const [formState, formAction] = useFormState(onSubmit, {
+    message: "",
+    errors: undefined,
+    data: {
+      name: data?.name ?? "",
+      bio: data?.bio ?? "",
+      banner: data?.banner ?? "",
+      avatar: data?.avatar ?? "",
+    }
+  })
+
+  useEffect(() => {
+    if (!formState.errors && formState.message) {
+      router.push("/")
+    }
+  }, [formState])
+
   return (
-    <form action={onSubmit}>
+    <form action={formAction}>
       <div className="w-full h-32 border-b bg-gray-200 pt-4 border-gray-300 relative">
         <ImageUpload image_url={data?.banner} name="banner" />
       </div>
@@ -59,6 +83,10 @@ export const ProfileForm: FC<ProfileFormProps> = ({ onSubmit, data }) => {
               name="name"
               className="mt-2"
             />
+            {
+              formState.errors?.name &&
+              <p className="text-xs text-red-500">{formState.errors?.name}</p>
+            }
           </div>
         </div>
       </div>
@@ -71,6 +99,10 @@ export const ProfileForm: FC<ProfileFormProps> = ({ onSubmit, data }) => {
           className=""
           content={data?.bio}
         />
+        {
+          formState.errors?.bio &&
+          <p className="text-xs text-red-500">{formState.errors?.bio}</p>
+        }
       </div>
 
       <SubmitButton className="mt-4 w-full" type="submit">Submit</SubmitButton>

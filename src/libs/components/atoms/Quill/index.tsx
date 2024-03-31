@@ -83,7 +83,7 @@ export const Quill = (
   }), [])
 
   return (
-    <div className="text-editor">
+    <div className={cn(["text-editor", className])}>
       <input type="hidden" name={name} value={value} />
       <CustomReactQuill
         forwadedRef={quillRef}

@@ -9,16 +9,10 @@ export default function BlogAdd() {
     redirect("/")
   }
 
-  const onSubmit = async (e: any) => {
-    "use server"
-    createBlog(e)
-    redirect("/")
-  }
-
   return (
     <main className="flex min-h-screen bg-secondary-100 flex-col items-center justify-between p-4 md:px-24">
       <div className="bg-white min-h-screen w-full max-w-5xl justify-center py-4 text-sm lg:flex">
-        <BlogForm onSubmit={onSubmit} />
+        <BlogForm onSubmit={createBlog} />
       </div>
     </main>
   )

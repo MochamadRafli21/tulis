@@ -1,8 +1,11 @@
 import { z } from "zod";
+import { responseData } from "@/libs/type";
 
 export type CreateUser = z.infer<typeof CreateUserSchema>;
 export type User = z.infer<typeof UserResponse>;
 export type EditUser = z.infer<typeof EditUserSchema>;
+
+export type EditUserResponse = responseData<EditUser>;
 
 export const CreateUserSchema = z.object({
   name: z.string().nonempty({ message: "Name cannot be empty" }),
@@ -34,3 +37,4 @@ export const EditUserSchema = z.object({
   banner: z.string(),
   avatar: z.string(),
 });
+

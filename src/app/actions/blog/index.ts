@@ -15,8 +15,13 @@ import {
 import { revalidatePath } from "next/cache"
 import { verifyToken } from "@/libs/services"
 import { getSession } from "@/libs/utils"
+import { BlogResponse, Blog } from "@/libs/zod/schema"
+import { ZodError } from "zod"
 
-export async function createBlog(formData: FormData) {
+export async function createBlog(
+  prevState: BlogResponse,
+  formData: FormData
+): Promise<BlogResponse> {
   const session = getSession()
   if (!session) {
     throw new Error("User not found")
@@ -25,27 +30,54 @@ export async function createBlog(formData: FormData) {
   if (!id) {
     throw new Error("User not found")
   }
-  const title = formData.get("title")
-  const content = formData.get("content")
-  const subtitle = formData.get("subtitle")
-  const banner = formData.get("banner")
-  const blog = BlogSchema.parse({
-    title: title as string,
-    content: content as string,
-    subtitle: subtitle as string,
-    banner: banner ? banner as string : ''
-  })
+  const title = formData.get("title") as string;
+  const content = formData.get("content") as string;
+  const subtitle = formData.get("subtitle") as string;
+  const banner = formData.get("banner") as string;
 
   try {
+    const blog = BlogSchema.parse({
+      title: title,
+      content: content,
+      subtitle: subtitle,
+      banner: banner
+    })
     const data = await storeBlog(blog)
     await storeBlogUser({ userId: id, blogId: data.id })
     revalidatePath("/")
+    return {
+      "errors": undefined,
+      "message": "Blog created successfully",
+      "data": {
+        "title": data.title,
+        "content": data.content,
+        "subtitle": data.subtitle ?? '',
+        "banner": data.banner
+      }
+    }
+
   } catch (error) {
-    console.log(error)
+    const zodError = error as ZodError
+    const errorMap = zodError.flatten().fieldErrors
+    return {
+      "errors": {
+        "title": errorMap.title?.[0] ?? "",
+        "content": errorMap.content?.[0] ?? "",
+        "subtitle": errorMap.subtitle?.[0] ?? "",
+        "banner": errorMap.banner?.[0] ?? ""
+      },
+      "message": "Failed to create blog",
+      "data": {
+        "title": title,
+        "content": content,
+        "subtitle": subtitle,
+        "banner": banner
+      }
+    }
   }
 }
 
-export async function editBlog(id: string, formData: FormData) {
+export async function editBlog(id: string, formData: FormData): Promise<BlogResponse> {
   const session = getSession()
   if (!session) {
     throw new Error("User not found")
@@ -68,27 +100,53 @@ export async function editBlog(id: string, formData: FormData) {
     throw new Error("Blog not found") // TODO: handle error
   }
 
-  const title = formData.get("title")
-  const content = formData.get("content")
-  const subtitle = formData.get("subtitle")
-  const banner = formData.get("banner")
+  const title = formData.get("title") as string;
+  const content = formData.get("content") as string;
+  const subtitle = formData.get("subtitle") as string;
+  const banner = formData.get("banner") as string;
 
-  const blog = BlogSchema.parse({
-    title: title as string,
-    content: content as string,
-    subtitle: subtitle as string,
-    banner: banner as string
-  })
 
   try {
-    await updateBlog(id, blog)
+    const blog = BlogSchema.parse({
+      title: title,
+      content: content,
+      subtitle: subtitle,
+      banner: banner
+    })
+    const data = await updateBlog(id, blog)
     revalidatePath("/")
+    return {
+      "errors": undefined,
+      "message": "Blog created successfully",
+      "data": {
+        "title": data.title,
+        "content": data.content,
+        "subtitle": data.subtitle ?? '',
+        "banner": data.banner
+      }
+    }
   } catch (error) {
-    console.log(error) // TODO: handle error
+    const zodError = error as ZodError
+    const errorMap = zodError.flatten().fieldErrors
+    return {
+      "errors": {
+        "title": errorMap.title?.[0] ?? "",
+        "content": errorMap.content?.[0] ?? "",
+        "subtitle": errorMap.subtitle?.[0] ?? "",
+        "banner": errorMap.banner?.[0] ?? ""
+      },
+      "message": "Failed to create blog",
+      "data": {
+        "title": title,
+        "content": content,
+        "subtitle": subtitle,
+        "banner": banner
+      }
+    }
   }
 }
 
-export async function removeBlog(id: string) {
+export async function removeBlog(id: string): Promise<BlogResponse> {
   const session = getSession()
   if (!session) {
     throw new Error("User not found")
@@ -102,8 +160,22 @@ export async function removeBlog(id: string) {
     await destroyBlog(id)
     await deleteBlogUser({ userId, blogId: id })
     revalidatePath("/")
+    return {
+      "errors": undefined,
+      "message": "Blog created successfully",
+      "data": {} as Omit<Blog, "is_published">
+    }
   } catch (error) {
-    throw new Error("Failed To Delete Blog") // TODO: handle error
+    return {
+      "errors": {
+        "title": "",
+        "content": "",
+        "subtitle": "",
+        "banner": ""
+      },
+      "message": error as string,
+      "data": {} as Omit<Blog, "is_published">
+    }
   }
 }
 

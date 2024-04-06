@@ -15,6 +15,7 @@ export const textAreaStyles = cva('py-2 px-4 rounded border-b border-gray-300 fo
       bordered: 'bg-transparent text-slate-600 border border-slate-300',
       primary: ["bg-transparent", "text-slate-600"],
       secondary: ["bg-gray-100", "text-slate-900"],
+      danger: ["bg-transparent", "border-b border-red-500", "text-slate-900"],
     },
   },
   defaultVariants: {

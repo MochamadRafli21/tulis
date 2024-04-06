@@ -3,20 +3,18 @@ import { LoginForm } from "@/libs/components/templates";
 import { createJWT } from "@/app/actions";
 import { getSession } from "@/libs/utils";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { LoginResponse } from "@/libs/zod/schema"
 
 export default async function Login() {
 
-  const onSubmit = async (e: any) => {
+  const onSubmit = async (prevState: LoginResponse, e: FormData) => {
     "use server"
-    await createJWT(e)
-
+    const response = await createJWT(prevState, e)
     const session = getSession()
-    console.log(session)
     if (session) {
       revalidatePath("/")
-      redirect("/")
     }
+    return response
   }
   return (
     <main className="flex min-h-screen flex-col justify-center place-items-center">

@@ -23,7 +23,7 @@ export const buttonStyles = cva('bg-gray-200 hover:bg-gray-300 font-semibold py-
   },
 })
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>,
   VariantProps<typeof buttonStyles> { }
 
 

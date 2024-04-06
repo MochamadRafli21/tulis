@@ -2,6 +2,7 @@ import { editBlog, removeBlog, getBlogDetail } from "@/app/actions";
 import { BlogForm } from "@/libs/components";
 import { redirect } from "next/navigation";
 import { getSession } from "@/libs/utils";
+import { BlogResponse } from "@/libs/zod/schema";
 
 export default async function BlogUpdate({ params }: {
   params: {
@@ -20,11 +21,11 @@ export default async function BlogUpdate({ params }: {
     return data
   }
 
-  const onSubmit = async (e: any) => {
+  const onSubmit = async (prevState: BlogResponse, e: FormData) => {
     "use server"
-    editBlog(id, e)
+    const data = await editBlog(id, e)
+    return data
 
-    redirect("/")
   }
 
   const onDelete = async () => {

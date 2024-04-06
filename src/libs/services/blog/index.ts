@@ -16,7 +16,9 @@ export const storeBlog = async ({ title, content, is_published, subtitle, banner
       is_published,
       slug: generateSlug(title),
       subtitle: subtitle ?? '',
-      banner: banner ?? ''
+      banner: banner ?? '',
+      createdAt: new Date(),
+      updatedAt: new Date()
     })
     .returning();
   return data[0];
@@ -31,7 +33,8 @@ export const updateBlog = async (id: string, { title, content, is_published, sub
       is_published,
       slug: generateSlug(title),
       subtitle: subtitle ?? '',
-      banner: banner ?? ''
+      banner: banner ?? '',
+      updatedAt: new Date()
     })
     .where(eq(blog.id, id))
     .returning();
@@ -82,7 +85,7 @@ export const getBlogs = async (page?: number, pageSize?: number) => {
     .where(eq(blog.is_published, true))
     .limit(pageSize)
     .offset((page - 1) * pageSize)
-    .orderBy(desc(blog.id));
+    .orderBy(desc(blog.createdAt));
 
   if (data.length > 0) {
     data.forEach((item) => {

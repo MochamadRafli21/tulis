@@ -12,6 +12,7 @@
     "db:seed": "bun run tsx src/libs/database/seed/index.ts"
   },
   "dependencies": {
+    "@tailwindcss/line-clamp": "^0.4.4",
     "argon2": "^0.40.1",
     "class-variance-authority": "^0.7.0",
     "cloudinary": "^2.0.3",

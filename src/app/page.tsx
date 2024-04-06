@@ -18,22 +18,15 @@ export default async function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center">
-      <div
-        style={{
-          backgroundImage: `url(${user?.banner})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-        }}
-        className={"w-full px-2 md:px-4 pt-4 flex flex-col place-items-center"}>
-
-        <div className="w-full bg-white bg-opacity-85 backdrop-filter backdrop-blur-xl flex justify-between items-center rounded-lg border border-gray-300 shadow px-4 py-2 mb-4">
-          <h1 className="text-2xl font-semibold">BLOG</h1>
+      <div className="w-full px-4 mt-4">
+        <div className="w-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] bg-white bg-opacity-85 backdrop-filter backdrop-blur-xl flex justify-between items-center rounded-lg border min-h-12">
         </div>
+      </div>
 
+      <div className="w-full grid grid-cols-1 md:grid-cols-3 mt-4">
 
-        <div className="p-8 max-w-screen-lg mb-12 w-full justify-center md:justify-start lg:w-10/12">
-          <Card className="p-8 w-full md:w-[300px] bg-white bg-opacity-85 backdrop-filter backdrop-blur-xl ">
+        <div className="px-4 md:px-8 md:sticky md:top-16 md:h-screen md:col-span-1 my-4 md:my-0 w-full justify-center">
+          <Card className="px-2 py-5 w-full bg-white bg-opacity-85 backdrop-filter backdrop-blur-xl ">
             <div className="mb-4 flex justify-center">
               {
                 user?.avatar &&
@@ -47,7 +40,7 @@ export default async function Home() {
                 </div>
               }
             </div>
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between px-3 pt-4 items-center">
               <h1 className="text-2xl font-semibold col-span-2">{user?.name}</h1>
 
               {
@@ -64,11 +57,23 @@ export default async function Home() {
           </Card>
         </div>
 
+        <div className="col-span-2 w-full px-4 py-3 md:py-0 md:px-4">
+          <div
+            style={{
+              backgroundImage: `url(${user?.banner})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+            }}
+            className={"hidden md:block w-full px-2 md:px-4 pt-4 h-40"}>
+          </div>
+          <MasonryContainer className="max-w-5xl mt-4 w-full">
+            <BlogListCompound />
+          </MasonryContainer>
+        </div>
+
       </div>
 
-      <MasonryContainer className="max-w-5xl px-4 my-12 w-full">
-        <BlogListCompound />
-      </MasonryContainer>
 
       {session &&
         <Link href="/blog/add">

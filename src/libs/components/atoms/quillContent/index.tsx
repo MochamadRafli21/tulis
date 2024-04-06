@@ -8,7 +8,6 @@ interface ContentProps extends React.HTMLAttributes<HTMLDivElement> {
 
 }
 
-
 export const QuilContent = ({ content, className }: ContentProps) => {
   return (
     <div className='ql-container ql-snow !border-none'>

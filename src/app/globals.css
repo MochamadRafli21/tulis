@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .ql-editor {
-  min-height: 100px;
+  min-height: 140px;
   overflow-y: hidden !important;
 }
 

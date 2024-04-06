@@ -23,7 +23,7 @@ export const inputStyles = cva('py-2 px-4 rounded border-b border-gray-300 focus
   },
 })
 
-interface InputProps extends VariantProps<typeof inputStyles>, React.InputHTMLAttributes<HTMLInputElement> { }
+export interface InputProps extends VariantProps<typeof inputStyles>, React.InputHTMLAttributes<HTMLInputElement> { }
 
 export const Input: FC<InputProps> = ({ className, inputSize, variant, onChange, ...props }) => {
   return (

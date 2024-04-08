@@ -2,14 +2,29 @@
 
 import { useDisplay } from "../Context";
 
-export default function TriggerDisplay({ children, onClick }: { children: React.ReactNode, onClick?: () => void }) {
-  const { toggle } = useDisplay();
+export default function TriggerDisplay({ children, onClick, targetState
+}: {
+  children: React.ReactNode,
+  onClick?: () => void,
+  targetState?: boolean
+}) {
+  const { toggle, setActive, setBlur } = useDisplay();
   const updateState = () => {
     if (onClick) {
       onClick();
     }
-    toggle()
+    if (targetState === undefined) {
+      toggle();
+    } else if (targetState) {
+      setActive();
+    } else {
+      setBlur();
+    }
   }
 
-  return <div onClick={updateState}>{children}</div>;
+  return <div
+    onClick={updateState}
+  >
+    {children}
+  </div>;
 }

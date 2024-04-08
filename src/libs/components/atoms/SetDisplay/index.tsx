@@ -13,9 +13,19 @@ function SetDisplay({ children, defaultOn }: { children: React.ReactNode, defaul
     setOn((prevState) => !prevState);
   };
 
+  const setActive = () => {
+    setOn(true)
+  }
+
+  const setBlur = () => {
+    setOn(false)
+  }
+
   const contextValue = {
     on,
     toggle,
+    setActive,
+    setBlur
   };
 
   return (

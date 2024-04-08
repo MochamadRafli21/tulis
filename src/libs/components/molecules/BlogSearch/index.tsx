@@ -1,17 +1,27 @@
 "use client"
-import { useState } from 'react';
+import { Input } from "../../atoms/Input"
 import SetDisplay from "../../atoms/SetDisplay"
 import SelectProvider from "../../atoms/Select"
 import Card from "../../molecules/Card"
-import { Input } from "../../atoms"
+
+import { getBlogs } from "@/libs/services/blog";
+import { Blog } from "@/libs/zod/schema";
+
+import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 
+type itemList = Blog & { slug: string, id: string, content: string }
+
 export default function BlogSearch({ query }: { query?: string }) {
+
   const router = useRouter()
   const [value, setValue] = useState(query ?? "");
+  const [data, setData] = useState<itemList[]>([]);
 
-  const data = ["test", "test2"]
+  const openBlog = (slug: string) => {
+    router.push("/blog/" + slug)
+  }
 
   const submitSearch = () => {
     if (!value) return
@@ -22,9 +32,34 @@ export default function BlogSearch({ query }: { query?: string }) {
     if (i === 0) {
       submitSearch()
     } else {
-      setValue(data[i - 1])
+      openBlog(data[i - 1].slug)
     }
   }
+
+  const getQueryData = async () => {
+    const res = async () => {
+      const apiBlogs = await getBlogs(1, 5, value)
+      return apiBlogs
+    }
+    const data = await res()
+    if (!data) return false
+    const mappedData: itemList[] = data.map((blog) => {
+      return {
+        title: blog.title,
+        subtitle: blog.subtitle ?? "",
+        banner: blog.banner ?? "",
+        slug: blog.slug,
+        content: `<p>${blog.content.replaceAll(/<.*?>/g, "").substring(0, 200)}</p>`,
+      } as itemList
+    })
+    setData([...mappedData])
+    return true
+  }
+
+  useEffect(() => {
+    if (!value) return
+    getQueryData()
+  }, [value])
 
   return (
     <>
@@ -59,10 +94,10 @@ export default function BlogSearch({ query }: { query?: string }) {
                                 return (
                                   <div
                                     className='cursor-pointer px-2 py-1 rounded'
-                                    onClick={() => setValue(item)}
+                                    onClick={() => openBlog(item.slug)}
                                     key={data.indexOf(item)}
                                   >
-                                    {item}
+                                    {item.title}
                                   </div>
                                 )
                               })
@@ -75,6 +110,7 @@ export default function BlogSearch({ query }: { query?: string }) {
                   </div>
                 </div>
                 {
+                  typeof window === "object" &&
                   createPortal(
                     <SetDisplay.ToggleDisplay targetState={false}>
                       <div className='absolute z-10 top-0 left-0 w-screen h-screen' />

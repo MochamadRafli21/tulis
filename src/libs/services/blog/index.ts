@@ -3,7 +3,7 @@
 import { db } from "@/libs/database";
 import { blog } from "@/libs/database/schema";
 import { Blog } from "@/libs/zod/schema";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, and, ilike, or } from "drizzle-orm";
 import DOMPurify from "isomorphic-dompurify";
 import { generateSlug } from "@/libs/utils";
 
@@ -75,14 +75,26 @@ export const getBlogById = async (id: string) => {
   return data[0];
 }
 
-export const getBlogs = async (page?: number, pageSize?: number) => {
+export const getBlogs = async (page?: number, pageSize?: number, q?: string) => {
   if (!page) page = 1;
   if (!pageSize) pageSize = 10;
 
   const data = await db
     .select()
     .from(blog)
-    .where(eq(blog.is_published, true))
+    .where(
+      and(
+        eq(blog.is_published, true),
+        ...q
+          ? [
+            or(
+              ilike(blog.title, `%${q}%`),
+              ilike(blog.subtitle, `%${q}%`)
+            )
+          ]
+          : []
+      )
+    )
     .limit(pageSize)
     .offset((page - 1) * pageSize)
     .orderBy(desc(blog.createdAt));
@@ -92,6 +104,8 @@ export const getBlogs = async (page?: number, pageSize?: number) => {
       item.content = DOMPurify.sanitize(item.content);
     });
   }
+
+  console.log(data)
   return data;
 }
 

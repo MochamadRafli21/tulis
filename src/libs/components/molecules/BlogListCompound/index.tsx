@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Blog } from "@/libs/zod/schema";
 import { getBlogs } from "@/libs/services/blog";
 import Card from "@/libs/components/molecules/Card";
@@ -8,15 +8,20 @@ import InfiniteScroll from "@/libs/components/atoms/InfiniteScroll";
 import { QuilContent } from "@/libs/components/atoms";
 import Link from "next/link"
 import Image from "next/image";
+import { useSearchParams } from 'next/navigation'
+
 
 type itemList = Blog & { slug: string, id: string, content: string }
 
 export default function BlogListCompound() {
+  const query = useSearchParams()?.get("q") as string
   const [blogs, setBlogs] = useState<itemList[]>([]);
+  const [init, setInit] = useState<boolean>();
+  const page = 1
 
   const getMoreData = async (page: number) => {
     const res = async () => {
-      const apiBlogs = await getBlogs(page)
+      const apiBlogs = await getBlogs(page, 10, query)
       return apiBlogs
     }
     const data = await res()
@@ -30,11 +35,18 @@ export default function BlogListCompound() {
         content: `<p>${blog.content.replaceAll(/<.*?>/g, "").substring(0, 200)}</p>`,
       } as itemList
     })
-    setBlogs([...blogs, ...mappedData])
+    init ? setBlogs([...blogs, ...mappedData]) : mappedData && setBlogs([...mappedData])
+    setInit(false)
     return true
   }
+
+  useEffect(() => {
+    setInit(true)
+    getMoreData(page)
+  }, [query])
+
   return (
-    <InfiniteScroll currentPage={1} onUpdate={getMoreData}>
+    <InfiniteScroll currentPage={page} onUpdate={!init ? getMoreData : undefined}>
       {blogs.map((blog) => {
         return (
           <Card className="mb-3 py-2 break-inside-avoid h-fit horver:bg-gray-100" key={blog.slug}>

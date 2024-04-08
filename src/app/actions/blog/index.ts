@@ -179,9 +179,9 @@ export async function removeBlog(id: string): Promise<BlogResponse> {
   }
 }
 
-export async function getBlogList(page = 1, pageSize = 10) {
+export async function getBlogList(page = 1, pageSize = 10, query = "") {
   try {
-    const data = await getBlogs(page, pageSize)
+    const data = await getBlogs(page, pageSize, query)
     return data
   } catch (error) {
     console.log(error) // TODO: handle error

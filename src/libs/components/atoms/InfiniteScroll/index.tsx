@@ -7,7 +7,7 @@ import TriggerScroll from "@/libs/components/atoms/InfiniteScroll/ScrollTrigger"
 function InfiniteScroll({ currentPage, onUpdate, children }: {
   onUpdate?: (page: number) => Promise<boolean>,
   currentPage?: number,
-  children?: React.ReactNode
+  children?: React.ReactNode,
 }) {
   const [is_done, setDone] = useState(false);
   const [page, setPage] = useState(currentPage ?? 1);

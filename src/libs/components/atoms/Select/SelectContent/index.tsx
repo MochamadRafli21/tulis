@@ -8,7 +8,8 @@ interface SelectProps {
 }
 
 export default function SelectContent({ children }: SelectProps) {
-  const { selectedPosition, setDataLength, index } = useSelect();
+  const { setSelected, selectedPosition, setDataLength, index } = useSelect();
+
   const childrenArray = React
     .Children
     .toArray(children)
@@ -26,8 +27,9 @@ export default function SelectContent({ children }: SelectProps) {
         }
         const childClick = child.props.onClick
         const onClick = () => {
+          setSelected(position)
           if (childClick) {
-            childClick()
+            childClick(position)
           }
         }
         const clone = React.cloneElement(child as React.ReactElement, {

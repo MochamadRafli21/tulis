@@ -33,7 +33,7 @@ export default function SelectControl({
   }
 
   const clone = React.cloneElement(children as React.ReactElement, {
-    onKeyUp: updateState
+    onKeyUp: updateState,
   })
 
   return clone

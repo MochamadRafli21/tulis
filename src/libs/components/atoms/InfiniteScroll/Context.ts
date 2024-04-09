@@ -5,11 +5,13 @@ import { createContext, useContext } from 'react';
 export interface ScrollContextValue {
   is_done: boolean;
   getMoreData: () => void;
+  reset: () => void;
 }
 
 export const ScrollContext = createContext<ScrollContextValue>({
   is_done: false,
-  getMoreData: () => { }
+  getMoreData: () => { },
+  reset: () => { }
 });
 
 export function useScroll() {

@@ -7,7 +7,7 @@ import Card from "../../molecules/Card"
 import { getBlogs } from "@/libs/services/blog";
 import { Blog } from "@/libs/zod/schema";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 
@@ -34,7 +34,15 @@ export default function BlogSearch({ query }: { query?: string }) {
     } else {
       openBlog(data[i - 1].slug)
     }
+    onBackdropClick()
   }
+
+  const backdropRef = useRef<HTMLDivElement>(null);
+  const onBackdropClick = () => {
+    backdropRef.current?.click();
+  };
+
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   const getQueryData = async () => {
     const res = async () => {
@@ -42,7 +50,6 @@ export default function BlogSearch({ query }: { query?: string }) {
       return apiBlogs
     }
     const data = await res()
-    if (!data) return false
     const mappedData: itemList[] = data.map((blog) => {
       return {
         title: blog.title,
@@ -53,12 +60,15 @@ export default function BlogSearch({ query }: { query?: string }) {
       } as itemList
     })
     setData([...mappedData])
-    return true
   }
+
 
   useEffect(() => {
     if (!value) return
     getQueryData()
+    if (searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
   }, [value])
 
   return (
@@ -67,11 +77,21 @@ export default function BlogSearch({ query }: { query?: string }) {
         <SetDisplay>
           <SelectProvider>
             <div className="flex flex-col">
-              <SetDisplay.ToggleDisplay targetState={true}>
-                <SelectProvider.Control onSelect={onSelect}>
-                  <Input onChange={(e) => setValue(e.target.value)} value={value} className="w-full" variant={"bordered"} />
-                </SelectProvider.Control>
-              </SetDisplay.ToggleDisplay>
+              <SetDisplay.ToggleFocusDisplay targetState={true}>
+                <label htmlFor="search">
+                  <SelectProvider.Control onSelect={onSelect}>
+                    <Input
+                      name="search"
+                      id="search"
+                      forwardref={searchInputRef}
+                      onChange={(e) => setValue(e.target.value)}
+                      value={value}
+                      className="w-full"
+                      variant={"bordered"}
+                    />
+                  </SelectProvider.Control>
+                </label>
+              </SetDisplay.ToggleFocusDisplay>
               <SetDisplay.ShowContent>
                 <div className='relative'>
                   <div className='absolute'>
@@ -113,7 +133,7 @@ export default function BlogSearch({ query }: { query?: string }) {
                   typeof window === "object" &&
                   createPortal(
                     <SetDisplay.ToggleDisplay targetState={false}>
-                      <div className='absolute z-10 top-0 left-0 w-screen h-screen' />
+                      <div ref={backdropRef} className='absolute z-10 top-0 left-0 w-screen h-screen' />
                     </SetDisplay.ToggleDisplay>
                     , document.body)
                 }

@@ -105,7 +105,6 @@ export const getBlogs = async (page?: number, pageSize?: number, q?: string) => 
     });
   }
 
-  console.log(data)
   return data;
 }
 

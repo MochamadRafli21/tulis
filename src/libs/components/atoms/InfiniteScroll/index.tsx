@@ -8,6 +8,7 @@ function InfiniteScroll({ currentPage, onUpdate, children }: {
   onUpdate?: (page: number) => Promise<boolean>,
   currentPage?: number,
   children?: React.ReactNode,
+  forceState?: boolean
 }) {
   const [is_done, setDone] = useState(false);
   const [page, setPage] = useState(currentPage ?? 1);
@@ -22,9 +23,18 @@ function InfiniteScroll({ currentPage, onUpdate, children }: {
     }
     setPage(page + 1)
   }
+
+  const reset = () => {
+    setDone(false)
+    setPage(1)
+  }
+
+
+
   const ScrollContextValue = {
     is_done,
-    getMoreData: loadMoreData
+    getMoreData: loadMoreData,
+    reset
   }
 
   return (

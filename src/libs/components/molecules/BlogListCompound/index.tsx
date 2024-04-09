@@ -1,11 +1,13 @@
 "use client"
 
-import { useState, useEffect } from "react";
 import { Blog } from "@/libs/zod/schema";
 import { getBlogs } from "@/libs/services/blog";
 import Card from "@/libs/components/molecules/Card";
 import InfiniteScroll from "@/libs/components/atoms/InfiniteScroll";
 import { QuilContent } from "@/libs/components/atoms";
+
+
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link"
 import Image from "next/image";
 import { useSearchParams } from 'next/navigation'
@@ -16,8 +18,9 @@ type itemList = Blog & { slug: string, id: string, content: string }
 export default function BlogListCompound() {
   const query = useSearchParams()?.get("q") as string
   const [blogs, setBlogs] = useState<itemList[]>([]);
-  const [init, setInit] = useState<boolean>();
   const page = 1
+
+  const scrollTriggerRef = useRef<{ resetScroll: () => void }>(null);
 
   const getMoreData = async (page: number) => {
     const res = async () => {
@@ -25,7 +28,7 @@ export default function BlogListCompound() {
       return apiBlogs
     }
     const data = await res()
-    if (!data) return false
+    if (data.length === 0) return true
     const mappedData: itemList[] = data.map((blog) => {
       return {
         title: blog.title,
@@ -35,18 +38,17 @@ export default function BlogListCompound() {
         content: `<p>${blog.content.replaceAll(/<.*?>/g, "").substring(0, 200)}</p>`,
       } as itemList
     })
-    init ? setBlogs([...blogs, ...mappedData]) : mappedData && setBlogs([...mappedData])
-    setInit(false)
-    return true
+    setBlogs([...blogs, ...mappedData])
+    return false
   }
 
   useEffect(() => {
-    setInit(true)
-    getMoreData(page)
+    setBlogs([])
+    scrollTriggerRef.current?.resetScroll()
   }, [query])
 
   return (
-    <InfiniteScroll currentPage={page} onUpdate={!init ? getMoreData : undefined}>
+    <InfiniteScroll currentPage={page} onUpdate={getMoreData}>
       {blogs.map((blog) => {
         return (
           <Card className="mb-3 py-2 break-inside-avoid h-fit horver:bg-gray-100" key={blog.slug}>
@@ -72,7 +74,7 @@ export default function BlogListCompound() {
           </Card>
         )
       })}
-      <InfiniteScroll.Trigger />
+      <InfiniteScroll.Trigger ref={scrollTriggerRef} />
     </InfiniteScroll>
   );
 }

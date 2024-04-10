@@ -6,7 +6,8 @@ import SubtitleInput from "../molecules/subtitle-input"
 import BannerInput from "../molecules/banner-input"
 import { BlogResponse } from "@/libs/zod/schema"
 
-import { Save, X } from "lucide-react"
+import { Save, Trash2 } from 'lucide-react';
+
 import { useEffect, FC } from "react"
 import { useRouter } from "next/navigation"
 import { useFormState } from "react-dom"
@@ -51,18 +52,18 @@ export const BlogForm: FC<BlogFormProps> = ({ onSubmit, onDelete, data }) => {
           {
             onDelete &&
             <form id="deleteForm" action={onDelete} >
-              <SubmitButton className="flex items-center text-center gap-2 w-24" form="deleteForm" variant={"danger"} type="submit">
-                <X />
-                Delete
+              <SubmitButton variant="danger" className="p-1 px-2 flex gap-2 items-center" form="deleteForm">
+                <Trash2 />
+                <h1>Delete</h1>
               </SubmitButton>
             </form>
 
           }
-          <SubmitButton className="flex items-center gap-2 w-24 text-center" form="submitForm" type="submit">
-            <Save />
-            Submit
-          </SubmitButton>
 
+          <SubmitButton variant="primary" className="p-1 px-2 flex gap-2 items-center" form="submitForm">
+            <Save />
+            <h1>Simpan</h1>
+          </SubmitButton>
         </div>
       </NavBar>
 

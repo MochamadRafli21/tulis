@@ -64,12 +64,12 @@ export default async function Home() {
             </div>
             {
               user?.bio &&
-              <QuilContent className="mt-2 max-h-[80px]" content={user?.bio ?? ""} />
+              <QuilContent className="mt-2" content={user?.bio ?? ""} />
             }
           </Card>
         </div>
 
-        <div className="col-span-2 w-full px-4 py-3 md:py-0 md:px-4">
+        <div className="col-span-2 min-h-screen w-full px-4 py-3 md:py-0 md:px-4">
           <div
             style={{
               backgroundImage: `url(${user?.banner})`,

@@ -107,7 +107,12 @@ export default function BlogSearch() {
                             {value &&
                               <div
                                 className='cursor-pointer px-2 py-1 rounded'
-                                onClick={() => submitSearch()}
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  console.log(e)
+                                  searchInputRef.current?.focus()
+                                  submitSearch()
+                                }}
                                 key={-1}
                               >
                                 {value ? value + "..." : "Search..."}
@@ -119,7 +124,12 @@ export default function BlogSearch() {
                                 return (
                                   <div
                                     className='cursor-pointer px-2 py-1 rounded'
-                                    onClick={() => openBlog(item.slug)}
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      console.log(e)
+                                      searchInputRef.current?.focus()
+                                      openBlog(item.slug)
+                                    }}
                                     key={data.indexOf(item)}
                                   >
                                     {item.title}

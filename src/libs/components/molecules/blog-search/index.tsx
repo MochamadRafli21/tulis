@@ -27,7 +27,7 @@ export default function BlogSearch() {
 
   const submitSearch = () => {
     if (!value) return
-    router.push("?q=" + value)
+    router.push("/?q=" + value)
   }
 
   const onSelect = (i: number) => {

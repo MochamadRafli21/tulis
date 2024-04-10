@@ -25,7 +25,7 @@ export default function TriggerFocusDisplay({ children, onFocus, onBlur
     }
     setTimeout(() => {
       setBlur();
-    }, 1000)
+    }, 800)
   }
 
   const clone = React.cloneElement(children as React.ReactElement, {

@@ -1,7 +1,7 @@
 "use client"
 
 import React from 'react'
-import { useDisplay } from "../Context";
+import { useDisplay } from "../display-context";
 
 export default function TriggerFocusDisplay({ children, onFocus, onBlur
 }: {

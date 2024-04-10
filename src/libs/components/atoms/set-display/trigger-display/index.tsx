@@ -1,6 +1,6 @@
 "use client"
 
-import { useDisplay } from "../Context";
+import { useDisplay } from "../display-context";
 
 export default function TriggerDisplay({ children, onClick, targetState
 }: {

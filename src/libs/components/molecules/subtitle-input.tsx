@@ -1,7 +1,7 @@
 "use client"
 import { useState } from 'react';
 
-import SetDisplay from "../atoms/SetDisplay"
+import SetDisplay from "../atoms/set-display"
 import { Label, Button, TextArea } from "../atoms"
 
 

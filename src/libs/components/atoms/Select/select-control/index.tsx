@@ -1,6 +1,6 @@
 "use client"
 import React from 'react'
-import { useSelect } from "../SelectContext";
+import { useSelect } from "../select-context";
 
 export default function SelectControl({
   children,

@@ -2,8 +2,8 @@
 
 import { Blog } from "@/libs/zod/schema";
 import { getBlogs } from "@/libs/services/blog";
-import Card from "@/libs/components/molecules/Card";
-import InfiniteScroll from "@/libs/components/atoms/InfiniteScroll";
+import Card from "@/libs/components/molecules/card";
+import InfiniteScroll from "@/libs/components/atoms/infinite-scroll";
 import { QuilContent } from "@/libs/components/atoms";
 
 
@@ -15,7 +15,7 @@ import { useSearchParams } from 'next/navigation'
 
 type itemList = Blog & { slug: string, id: string, content: string }
 
-export default function BlogListCompound() {
+export default function BlogList() {
   const query = useSearchParams()?.get("q") as string
   const [blogs, setBlogs] = useState<itemList[]>([]);
   const page = 1

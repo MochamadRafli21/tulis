@@ -1,7 +1,7 @@
 import { Button, MasonryContainer, QuilContent } from "@/libs/components/atoms";
-import Card from "@/libs/components/molecules/Card";
-import BlogListCompound from "@/libs/components/molecules/BlogListCompound";
-import BlogSearch from "@/libs/components/molecules/BlogSearch";
+import Card from "@/libs/components/molecules/card";
+import BlogList from "@/libs/components/molecules/blog-list";
+import { NavBar } from "@/libs/components/organisms/navbar";
 import { getUser } from "@/app/actions";
 import { getSession } from "@/libs/utils";
 
@@ -20,24 +20,20 @@ export default async function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center">
-      <div className="sticky top-5 z-20 w-full px-4 mt-4">
-        <div className="w-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] bg-white bg-opacity-95 backdrop-blur-sm flex justify-between items-center rounded-lg border px-3 py-2">
-          <div className="flex flex-col md:flex-row gap-2 md:items-center w-full">
-            <h1 className="text-xl font-semibold w-fit">{user?.name.split(" ")[0]}.</h1>
-            <div className="w-full flex justify-between items-center">
-              <BlogSearch />
-              {session &&
-                <Link href="/blog/add">
-                  <Button variant="bordered" className="p-1 px-2 text-secondary flex gap-2 items-center">
-                    <SquarePen />
-                    <h1 className="">Tulis</h1>
-                  </Button>
-                </Link>
-              }
-            </div>
-          </div>
-        </div>
-      </div>
+      <NavBar
+        title={user?.name.split(" ")[0] ?? ""}
+        isSearchable={true}
+        className="w-full"
+      >
+        {session &&
+          <Link href="/blog/add">
+            <Button variant="bordered" className="p-1 px-2 text-secondary flex gap-2 items-center">
+              <SquarePen />
+              <h1 className="">Tulis</h1>
+            </Button>
+          </Link>
+        }
+      </NavBar>
 
       <div className="w-full grid grid-cols-1 md:grid-cols-3 mt-4">
 
@@ -84,7 +80,7 @@ export default async function Home() {
             className={"hidden md:block w-full px-2 md:px-4 pt-4 h-40"}>
           </div>
           <MasonryContainer className="max-w-5xl mt-4 w-full">
-            <BlogListCompound />
+            <BlogList />
           </MasonryContainer>
         </div>
 

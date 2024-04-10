@@ -1,14 +1,17 @@
-import { getBlogBySlug } from "@/app/actions";
+import { getBlogBySlug, getUser } from "@/app/actions";
 import { Button, QuilContent } from "@/libs/components/atoms";
 import Link from "next/link"
 import Image from "next/image"
 import { getSession } from "@/libs/utils";
+import { NavBar } from "@/libs/components/organisms/navbar";
+import { SquarePen } from "lucide-react"
 
 export default async function BlogDetail({ params }: {
   params: {
     slug: string
   }
 }) {
+  const user = await getUser()
 
   const session = getSession()
 
@@ -23,14 +26,20 @@ export default async function BlogDetail({ params }: {
 
   return (
     <main className="flex min-h-screen flex-col items-center">
-      <div className="w-full flex justify-between items-center rounded-lg border border-gray-300 shadow px-4 py-2 mb-4">
-        <h1 className="text-2xl font-semibold">BLOG</h1>
+      <NavBar
+        title={user?.name.split(" ")[0] ?? ""}
+        isSearchable={true}
+        className="w-full"
+      >
         {session &&
           <Link href={`/blog/${blog?.id}/edit`}>
-            <Button variant="secondary" type="submit">Edit Blog</Button>
+            <Button variant="bordered" className="p-1 px-2 text-secondary flex gap-2 items-center">
+              <SquarePen />
+              <h1 className="">Edit</h1>
+            </Button>
           </Link>
         }
-      </div>
+      </NavBar>
 
       <div className="p-8 max-w-5xl w-full lg:w-3/5">
         {

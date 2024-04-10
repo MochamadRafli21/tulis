@@ -1,5 +1,5 @@
 "use client"
-import { useScroll } from "./Context";
+import { useScroll } from "./scroll-context";
 import { IntersectionContainer } from "@/libs/components/atoms";
 import { useImperativeHandle, ForwardedRef, forwardRef } from "react";
 
@@ -12,7 +12,6 @@ const TriggerScroll = forwardRef(
 
     useImperativeHandle(ref, () => ({
       resetScroll() {
-        console.log("reset")
         reset()
       }
     }), [reset]);

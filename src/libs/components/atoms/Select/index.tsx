@@ -1,9 +1,9 @@
 "use client"
 
 import React, { useState } from 'react';
-import { SelectContext } from './SelectContext';
-import SelectContent from './SelectContent';
-import SelectControl from './SelectControl';
+import { SelectContext } from './select-context';
+import SelectContent from './select-content';
+import SelectControl from './select-control';
 
 function SelectProvider({ children, defaultSelected }: { children: React.ReactNode, defaultSelected?: number }) {
   const [index, setCurrentIndex] = useState(0);

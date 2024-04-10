@@ -1,8 +1,8 @@
 "use client"
 
 import { useState } from "react";
-import { ScrollContext } from "@/libs/components/atoms/InfiniteScroll/Context";
-import TriggerScroll from "@/libs/components/atoms/InfiniteScroll/ScrollTrigger";
+import { ScrollContext } from "@/libs/components/atoms/infinite-scroll/scroll-context";
+import TriggerScroll from "@/libs/components/atoms/infinite-scroll/scroll-trigger";
 
 function InfiniteScroll({ currentPage, onUpdate, children }: {
   onUpdate?: (page: number) => Promise<boolean>,

@@ -1,8 +1,8 @@
 "use client"
-import { Input } from "../../atoms/Input"
-import SetDisplay from "../../atoms/SetDisplay"
-import SelectProvider from "../../atoms/Select"
-import Card from "../../molecules/Card"
+import { Input } from "../../atoms/input"
+import SetDisplay from "../../atoms/set-display"
+import SelectProvider from "../../atoms/select"
+import Card from "../../molecules/card"
 
 import { getBlogs } from "@/libs/services/blog";
 import { Blog } from "@/libs/zod/schema";
@@ -86,7 +86,7 @@ export default function BlogSearch() {
                       name="search"
                       id="search"
                       placeholder="Search..."
-                      forwardref={searchInputRef}
+                      ref={searchInputRef}
                       onChange={(e) => setValue(e.target.value)}
                       value={value}
                       className="w-full"
@@ -110,7 +110,7 @@ export default function BlogSearch() {
                                 onClick={() => submitSearch()}
                                 key={-1}
                               >
-                                {value + "..."}
+                                {value ? value + "..." : "Search..."}
                               </div>
 
                             }

@@ -4,7 +4,6 @@ import React from 'react';
 
 interface ContentProps extends React.HTMLAttributes<HTMLDivElement> {
   content: string
-
 }
 
 export const QuilContent = ({ content, className }: ContentProps) => {

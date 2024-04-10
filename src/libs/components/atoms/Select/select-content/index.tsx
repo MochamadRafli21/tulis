@@ -1,7 +1,7 @@
 "use client"
 
 import React from 'react'
-import { useSelect } from "../SelectContext";
+import { useSelect } from "../select-context";
 import { cn } from '@/libs/utils/cn'
 interface SelectProps {
   children: React.ReactNode,

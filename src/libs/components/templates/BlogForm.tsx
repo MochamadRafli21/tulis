@@ -93,7 +93,7 @@ export const BlogForm: FC<BlogFormProps> = ({ onSubmit, onDelete, data }) => {
         </div>
 
 
-        <div className="mt-4 bg-white h-fit">
+        <div className="mt-4 bg-white">
           <Label className="mb-4" htmlFor="content">Content</Label>
           {
             formState.errors?.title &&
@@ -102,7 +102,7 @@ export const BlogForm: FC<BlogFormProps> = ({ onSubmit, onDelete, data }) => {
           <Quill
             name="content"
             readOnly={false}
-            className={"min-h-[300px] " + (formState.errors?.content ? "h-fit border border-red-500" : "")}
+            className={"" + (formState.errors?.content ? "border border-red-500" : "")}
             content={data?.content}
           />
         </div>

@@ -10,10 +10,12 @@ import { Blog } from "@/libs/zod/schema";
 import { useEffect, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation'
 
 type itemList = Blog & { slug: string, id: string, content: string }
 
-export default function BlogSearch({ query }: { query?: string }) {
+export default function BlogSearch() {
+  const query = useSearchParams()?.get("q") as string
 
   const router = useRouter()
   const [value, setValue] = useState(query ?? "");
@@ -83,11 +85,14 @@ export default function BlogSearch({ query }: { query?: string }) {
                     <Input
                       name="search"
                       id="search"
+                      placeholder="Search..."
                       forwardref={searchInputRef}
                       onChange={(e) => setValue(e.target.value)}
                       value={value}
                       className="w-full"
                       variant={"bordered"}
+                      inputSize={"sm"}
+                      autoComplete="off"
                     />
                   </SelectProvider.Control>
                 </label>

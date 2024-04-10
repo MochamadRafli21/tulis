@@ -69,7 +69,7 @@ export default function BlogListCompound() {
                   <p className="text-gray-500">{blog.subtitle}</p>
                 }
               </div>
-              <QuilContent className="!h-20 text-gray-400 line-clamp-3 truncate" content={blog.content} />
+              <QuilContent className="!h-fit text-gray-400 line-clamp-3 truncate" content={blog.content} />
             </Link>
           </Card>
         )

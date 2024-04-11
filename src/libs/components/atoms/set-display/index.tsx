@@ -1,10 +1,11 @@
 "use client"
 
 import React, { useState } from 'react';
-import { DisplayContext } from './Context';
-import ContentDisplay from './ContentDisplay';
-import ContentHidden from './ContentHidden';
-import TriggerDisplay from './TriggerDisplay';
+import { DisplayContext } from './display-context';
+import ContentDisplay from './content-display';
+import ContentHidden from './content-hidden';
+import TriggerDisplay from './trigger-display';
+import TriggerFocusDisplay from './trigger-focus';
 
 function SetDisplay({ children, defaultOn }: { children: React.ReactNode, defaultOn?: boolean }) {
   const [on, setOn] = useState(defaultOn ?? false);
@@ -13,9 +14,19 @@ function SetDisplay({ children, defaultOn }: { children: React.ReactNode, defaul
     setOn((prevState) => !prevState);
   };
 
+  const setActive = () => {
+    setOn(true)
+  }
+
+  const setBlur = () => {
+    setOn(false)
+  }
+
   const contextValue = {
     on,
     toggle,
+    setActive,
+    setBlur
   };
 
   return (
@@ -28,5 +39,6 @@ function SetDisplay({ children, defaultOn }: { children: React.ReactNode, defaul
 SetDisplay.ShowContent = ContentDisplay;
 SetDisplay.HideContent = ContentHidden;
 SetDisplay.ToggleDisplay = TriggerDisplay;
+SetDisplay.ToggleFocusDisplay = TriggerFocusDisplay;
 
 export default SetDisplay;

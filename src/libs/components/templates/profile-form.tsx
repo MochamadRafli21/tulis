@@ -1,7 +1,7 @@
 "use client"
 
 import { Label, Input, Quill } from "../atoms"
-import ImageUpload from "../molecules/ImageUpload"
+import ImageUpload from "../molecules/image-upload"
 import { SubmitButton } from "../molecules"
 import { EditUserResponse } from "@/libs/zod/schema"
 

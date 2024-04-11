@@ -1,3 +1,3 @@
-export * from './BlogForm'
-export * from './LoginForm'
-export * from './ProfileForm'
+export * from './blog-form'
+export * from './login-form'
+export * from './profile-form'

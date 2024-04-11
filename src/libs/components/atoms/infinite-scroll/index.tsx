@@ -1,13 +1,14 @@
 "use client"
 
 import { useState } from "react";
-import { ScrollContext } from "@/libs/components/atoms/InfiniteScroll/Context";
-import TriggerScroll from "@/libs/components/atoms/InfiniteScroll/ScrollTrigger";
+import { ScrollContext } from "@/libs/components/atoms/infinite-scroll/scroll-context";
+import TriggerScroll from "@/libs/components/atoms/infinite-scroll/scroll-trigger";
 
 function InfiniteScroll({ currentPage, onUpdate, children }: {
   onUpdate?: (page: number) => Promise<boolean>,
   currentPage?: number,
-  children?: React.ReactNode
+  children?: React.ReactNode,
+  forceState?: boolean
 }) {
   const [is_done, setDone] = useState(false);
   const [page, setPage] = useState(currentPage ?? 1);
@@ -22,9 +23,18 @@ function InfiniteScroll({ currentPage, onUpdate, children }: {
     }
     setPage(page + 1)
   }
+
+  const reset = () => {
+    setDone(false)
+    setPage(1)
+  }
+
+
+
   const ScrollContextValue = {
     is_done,
-    getMoreData: loadMoreData
+    getMoreData: loadMoreData,
+    reset
   }
 
   return (

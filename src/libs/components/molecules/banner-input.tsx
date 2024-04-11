@@ -1,7 +1,7 @@
 "use client"
 import { useState } from 'react';
 import Image from 'next/image';
-import SetDisplay from "../atoms/SetDisplay"
+import SetDisplay from "../atoms/set-display"
 import { Label, Button, UploadPreview } from "../atoms"
 import { uploadFile } from '@/libs/hooks';
 

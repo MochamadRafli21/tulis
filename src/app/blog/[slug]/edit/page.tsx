@@ -37,10 +37,15 @@ export default async function BlogUpdate({ params }: {
   const blog = await getData()
 
   return (
-    <main className="flex min-h-screen bg-secondary-100 flex-col items-center justify-between p-2 md:px-24">
-      <div className="bg-white min-h-screen h-fit w-full max-w-3xl justify-center md:p-4 text-sm lg:flex">
+    <main className="flex min-h-screen bg-secondary-100 flex-col items-center justify-between px-2 md:px-24">
+      <div className="bg-white min-h-screen h-fit w-full max-w-3xl justify-center md:p-4 text-sm">
         <BlogForm onSubmit={onSubmit} onDelete={onDelete}
-          data={{ title: blog?.title, content: blog?.content, subtitle: blog?.subtitle ?? '', banner: blog?.banner ?? '' }} />
+          data={{
+            title: blog?.title,
+            content: blog?.content,
+            subtitle: blog?.subtitle ?? '',
+            banner: blog?.banner ?? ''
+          }} />
       </div>
     </main>
   )

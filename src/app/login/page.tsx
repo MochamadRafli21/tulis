@@ -1,4 +1,4 @@
-import Card from "@/libs/components/molecules/Card";
+import Card from "@/libs/components/molecules/card";
 import { LoginForm } from "@/libs/components/templates";
 import { createJWT } from "@/app/actions";
 import { getSession } from "@/libs/utils";

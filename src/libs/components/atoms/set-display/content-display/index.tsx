@@ -1,6 +1,6 @@
 "use client"
 
-import { useDisplay } from "../Context";
+import { useDisplay } from "../display-context";
 
 export default function ContentDisplay({ children }: { children: React.ReactNode }) {
   const { on } = useDisplay();

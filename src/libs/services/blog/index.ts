@@ -3,7 +3,7 @@
 import { db } from "@/libs/database";
 import { blog } from "@/libs/database/schema";
 import { Blog } from "@/libs/zod/schema";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, and, ilike, or } from "drizzle-orm";
 import DOMPurify from "isomorphic-dompurify";
 import { generateSlug } from "@/libs/utils";
 
@@ -16,7 +16,9 @@ export const storeBlog = async ({ title, content, is_published, subtitle, banner
       is_published,
       slug: generateSlug(title),
       subtitle: subtitle ?? '',
-      banner: banner ?? ''
+      banner: banner ?? '',
+      createdAt: new Date(),
+      updatedAt: new Date()
     })
     .returning();
   return data[0];
@@ -31,7 +33,8 @@ export const updateBlog = async (id: string, { title, content, is_published, sub
       is_published,
       slug: generateSlug(title),
       subtitle: subtitle ?? '',
-      banner: banner ?? ''
+      banner: banner ?? '',
+      updatedAt: new Date()
     })
     .where(eq(blog.id, id))
     .returning();
@@ -72,23 +75,36 @@ export const getBlogById = async (id: string) => {
   return data[0];
 }
 
-export const getBlogs = async (page?: number, pageSize?: number) => {
+export const getBlogs = async (page?: number, pageSize?: number, q?: string) => {
   if (!page) page = 1;
   if (!pageSize) pageSize = 10;
 
   const data = await db
     .select()
     .from(blog)
-    .where(eq(blog.is_published, true))
+    .where(
+      and(
+        eq(blog.is_published, true),
+        ...q
+          ? [
+            or(
+              ilike(blog.title, `%${q}%`),
+              ilike(blog.subtitle, `%${q}%`)
+            )
+          ]
+          : []
+      )
+    )
     .limit(pageSize)
     .offset((page - 1) * pageSize)
-    .orderBy(desc(blog.id));
+    .orderBy(desc(blog.createdAt));
 
   if (data.length > 0) {
     data.forEach((item) => {
       item.content = DOMPurify.sanitize(item.content);
     });
   }
+
   return data;
 }
 

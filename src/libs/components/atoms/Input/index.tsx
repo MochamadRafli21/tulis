@@ -1,5 +1,5 @@
 import { cn } from '@/libs/utils/cn'
-import React, { FC } from 'react'
+import React, { ForwardedRef, forwardRef, RefObject } from 'react'
 import { VariantProps, cva } from 'class-variance-authority'
 
 export const inputStyles = cva('py-2 px-4 rounded border-b border-gray-300 focus:outline-none w-full', {
@@ -23,15 +23,21 @@ export const inputStyles = cva('py-2 px-4 rounded border-b border-gray-300 focus
   },
 })
 
-interface InputProps extends VariantProps<typeof inputStyles>, React.InputHTMLAttributes<HTMLInputElement> { }
+export interface InputProps extends VariantProps<typeof inputStyles>, React.InputHTMLAttributes<HTMLInputElement> {
+  ref?: RefObject<HTMLInputElement>
+}
 
-export const Input: FC<InputProps> = ({ className, inputSize, variant, onChange, ...props }) => {
+export const Input = forwardRef(function Input(
+  { className, inputSize, variant, onChange, ...props }: InputProps,
+  ref?: ForwardedRef<HTMLInputElement>
+) {
   return (
     <input
+      ref={ref}
       onChange={onChange}
       className={
         cn(inputStyles({ inputSize, variant, className }))}
       {...props}
     />
   )
-}
+})

@@ -4,6 +4,7 @@ import { verifyToken } from "@/libs/services"
 import { getSession } from "@/libs/utils"
 import { EditUserSchema, EditUserResponse } from "@/libs/zod/schema"
 import { ZodError } from "zod"
+import { revalidatePath } from "next/cache"
 
 export async function getUser() {
   try {
@@ -112,6 +113,8 @@ export async function updateProfile(prevData: EditUserResponse, formData: FormDa
     })
 
     const user = await updateUser(data.id, payload)
+    revalidatePath("/")
+    revalidatePath("/profile")
 
     return {
       "errors": undefined,

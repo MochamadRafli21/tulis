@@ -1,19 +1,18 @@
 "use server"
-import { getUserById, getUserList, updateUser } from "@/libs/services/user"
-import { verifyToken } from "@/libs/services"
+import { getUserById, updateUser, storeUser, getUserByEmail } from "@/libs/services/user"
+import { verifyToken, sendEmail, generateEmailVerificationLink } from "@/libs/services"
 import { getSession } from "@/libs/utils"
-import { EditUserSchema, EditUserResponse } from "@/libs/zod/schema"
+import { EditUserSchema, EditUserResponse, CreateUserSchema, CreateUserResponse } from "@/libs/zod/schema"
 import { ZodError } from "zod"
 import { revalidatePath } from "next/cache"
 
-export async function getUser() {
+export async function getUser(id: string) {
   try {
-    //const data = await getUserById(id)
-    const data = await getUserList()
+    const data = await getUserById(id)
     if (!data) {
       throw new Error("User not found")
     }
-    return data[0]
+    return data
   } catch (error) {
     console.log(error) // TODO: handle error
   }
@@ -127,23 +126,139 @@ export async function updateProfile(prevData: EditUserResponse, formData: FormDa
       }
     }
   } catch (error) {
-    const zodError = error as ZodError
-    const errorMap = zodError.flatten().fieldErrors
-    return {
-      "errors": {
-        "name": errorMap.name?.[0] ?? "",
-        "avatar": errorMap.avatar?.[0] ?? "",
-        "bio": errorMap.bio?.[0] ?? "",
-        "banner": errorMap.banner?.[0] ?? ""
-      },
-      "message": "Failed to update profile",
-      "data": {
-        name,
-        avatar,
-        bio,
-        banner
+    if (error instanceof ZodError) {
+      const zodError = error as ZodError
+      const errorMap = zodError.flatten().fieldErrors
+      return {
+        "errors": {
+          "name": errorMap.name?.[0] ?? "",
+          "avatar": errorMap.avatar?.[0] ?? "",
+          "bio": errorMap.bio?.[0] ?? "",
+          "banner": errorMap.banner?.[0] ?? ""
+        },
+        "message": "Failed to update profile",
+        "data": {
+          name,
+          avatar,
+          bio,
+          banner
+        }
+      }
+    } else {
+      return {
+        "errors": {
+          "name": "",
+          "avatar": "",
+          "bio": "",
+          "banner": ""
+        },
+        "message": "Failed to update profile",
+        "data": {
+          name,
+          avatar,
+          bio,
+          banner
+        }
       }
     }
   }
 }
 
+
+export async function registerUser(prevData: CreateUserResponse, formData: FormData) {
+  const name = formData.get("name") as string;
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
+
+  try {
+    const payload = CreateUserSchema.parse({
+      name: name as string,
+      email: email as string,
+      password: password as string
+    })
+    const existingUser = await getUserByEmail(email)
+    if (existingUser) {
+      if (existingUser?.is_verified === true) {
+        return {
+          "errors": {
+            "name": "",
+            "email": "",
+            "password": ""
+          },
+          "message": "User Already Exist",
+          "data": {
+            "name": existingUser.name,
+            "email": existingUser.email,
+            "password": ""
+          }
+        } as CreateUserResponse
+      } else if (existingUser?.is_verified === false) {
+        const verificationLink = generateEmailVerificationLink(existingUser.verification_token as string)
+        sendEmail(
+          existingUser.email,
+          "Tulis Email Verification",
+          `Please Click On The Link To Verify Your Email: ${verificationLink}`
+        )
+        return {
+          "errors": undefined,
+          "message": "User created successfully",
+          "data": {
+            "name": existingUser.name,
+            "email": existingUser.email,
+            "password": ""
+          }
+        } as CreateUserResponse
+      }
+    } else {
+      const user = await storeUser(payload)
+
+      const verificationLink = generateEmailVerificationLink(user.verification_token as string)
+      sendEmail(
+        user.email,
+        "Tulis Email Verification",
+        `Please Click On The Link To Verify Your Email: ${verificationLink}`
+      )
+      return {
+        "errors": undefined,
+        "message": "User created successfully",
+        "data": {
+          "name": user.name,
+          "email": user.email,
+          "password": ""
+        }
+      } as CreateUserResponse
+    }
+  } catch (error) {
+    if (error instanceof ZodError) {
+      const zodError = error as ZodError
+      const errorMap = zodError.flatten().fieldErrors
+      return {
+        "errors": {
+          "name": errorMap.name?.[0] ?? "",
+          "email": errorMap.email?.[0] ?? "",
+          "password": errorMap.password?.[0] ?? ""
+        },
+        "message": "Failed to update profile",
+        "data": {
+          name,
+          email,
+          password
+        }
+      } as CreateUserResponse
+    } else {
+      return {
+        "errors": {
+          "name": "",
+          "email": "",
+          "password": ""
+        },
+        "message": "Failed to Create User",
+        "data": {
+          name,
+          email,
+          password
+        }
+      } as CreateUserResponse
+    }
+  }
+}

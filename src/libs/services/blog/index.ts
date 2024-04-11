@@ -1,7 +1,7 @@
 "use server"
 
 import { db } from "@/libs/database";
-import { blog } from "@/libs/database/schema";
+import { blog, bloguser } from "@/libs/database/schema";
 import { Blog } from "@/libs/zod/schema";
 import { eq, desc, and, ilike, or } from "drizzle-orm";
 import DOMPurify from "isomorphic-dompurify";
@@ -51,10 +51,25 @@ export const destroyBlog = async (id: string) => {
 
 export const getBlogPublic = async (slug: string) => {
   const data = await db
-    .select()
+    .select(
+      {
+        id: blog.id,
+        title: blog.title,
+        subtitle: blog.subtitle,
+        banner: blog.banner,
+        createdAt: blog.createdAt,
+        updatedAt: blog.updatedAt,
+        slug: blog.slug,
+        content: blog.content,
+        is_published: blog.is_published,
+        userId: bloguser.userId,
+        blogId: bloguser.blogId
+      }
+    )
     .from(blog)
     .where(eq(blog.slug, slug))
-    .limit(1);
+    .limit(1)
+    .innerJoin(bloguser, eq(blog.id, bloguser.blogId));
 
   if (data.length > 0) {
     data[0].content = DOMPurify.sanitize(data[0].content);
@@ -64,10 +79,23 @@ export const getBlogPublic = async (slug: string) => {
 
 export const getBlogById = async (id: string) => {
   const data = await db
-    .select()
+    .select({
+      id: blog.id,
+      title: blog.title,
+      subtitle: blog.subtitle,
+      banner: blog.banner,
+      createdAt: blog.createdAt,
+      updatedAt: blog.updatedAt,
+      slug: blog.slug,
+      content: blog.content,
+      is_published: blog.is_published,
+      userId: bloguser.userId,
+      blogId: bloguser.blogId
+    })
     .from(blog)
     .where(eq(blog.id, id))
-    .limit(1);
+    .limit(1)
+    .innerJoin(bloguser, eq(blog.id, bloguser.blogId));
 
   if (data.length > 0) {
     data[0].content = DOMPurify.sanitize(data[0].content);
@@ -80,7 +108,19 @@ export const getBlogs = async (page?: number, pageSize?: number, q?: string) => 
   if (!pageSize) pageSize = 10;
 
   const data = await db
-    .select()
+    .select({
+      id: blog.id,
+      title: blog.title,
+      subtitle: blog.subtitle,
+      banner: blog.banner,
+      createdAt: blog.createdAt,
+      updatedAt: blog.updatedAt,
+      content: blog.content,
+      is_published: blog.is_published,
+      slug: blog.slug,
+      userId: bloguser.userId,
+      blogId: bloguser.blogId,
+    })
     .from(blog)
     .where(
       and(
@@ -96,6 +136,7 @@ export const getBlogs = async (page?: number, pageSize?: number, q?: string) => 
       )
     )
     .limit(pageSize)
+    .innerJoin(bloguser, eq(blog.id, bloguser.blogId))
     .offset((page - 1) * pageSize)
     .orderBy(desc(blog.createdAt));
 

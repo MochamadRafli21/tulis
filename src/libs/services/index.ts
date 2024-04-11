@@ -11,7 +11,8 @@ export {
   updateUser,
   getUserById,
   getUserByEmail,
-  getUserList
+  getUserList,
+  activateUser
 } from "./user"
 export {
   storeBlogUser,
@@ -19,5 +20,6 @@ export {
   deleteBlogUser,
   getUserBlogs
 } from "./bloguser"
+export * from "./email"
 export * from "./cloudinary"
 export * from "./auth"

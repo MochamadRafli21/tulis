@@ -2,6 +2,7 @@
 
 import { Blog } from "@/libs/zod/schema";
 import { getBlogs } from "@/libs/services/blog";
+import { getUserBlogs } from "@/libs/services/bloguser";
 import Card from "@/libs/components/molecules/card";
 import InfiniteScroll from "@/libs/components/atoms/infinite-scroll";
 import { QuilContent } from "@/libs/components/atoms";
@@ -15,7 +16,7 @@ import { useSearchParams } from 'next/navigation'
 
 type itemList = Blog & { slug: string, id: string, content: string }
 
-export default function BlogList() {
+export default function BlogList({ userId }: { userId?: string }) {
   const query = useSearchParams()?.get("q") as string
   const [blogs, setBlogs] = useState<itemList[]>([]);
   const page = 1
@@ -24,7 +25,7 @@ export default function BlogList() {
 
   const getMoreData = async (page: number) => {
     const res = async () => {
-      const apiBlogs = await getBlogs(page, 10, query)
+      const apiBlogs = userId ? await getUserBlogs(userId, page, 10) : await getBlogs(page, 10, query)
       return apiBlogs
     }
     const data = await res()
@@ -75,6 +76,7 @@ export default function BlogList() {
         )
       })}
       <InfiniteScroll.Trigger ref={scrollTriggerRef} />
+      <div className="h-10"></div>
     </InfiniteScroll>
   );
 }

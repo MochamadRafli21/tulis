@@ -1,5 +1,5 @@
 "use server"
-import { getUserByEmail, generateToken } from "@/libs/services"
+import { getUserByEmail, generateToken, activateUser } from "@/libs/services"
 import * as argon from "argon2"
 import { cookies } from 'next/headers'
 import { LoginResponse } from "@/libs/zod/schema"
@@ -95,6 +95,34 @@ export async function createJWT(
     "data": {
       "email": email,
       "password": password,
+      "access_token": token
+    }
+  }
+}
+
+export const verifyEmail = async (token: string) => {
+  const data = await activateUser(token)
+  if (!data) {
+    return {
+      "errors": {
+        "email": "",
+        "password": "",
+        "access_token": "Failed To Verify Token, Please Try Again Later"
+      },
+      "message": "Activation failed",
+      "data": {
+        "email": "",
+        "password": "",
+        "access_token": ""
+      }
+    }
+  }
+
+  return {
+    "errors": undefined,
+    "message": "Activation successful",
+    "data": {
+      "email": data.email,
       "access_token": token
     }
   }

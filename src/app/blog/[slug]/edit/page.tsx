@@ -1,4 +1,5 @@
 import { editBlog, removeBlog, getBlogDetail } from "@/app/actions";
+import { verifyToken } from "@/libs/services";
 import { BlogForm } from "@/libs/components";
 import { redirect } from "next/navigation";
 import { getSession } from "@/libs/utils";
@@ -10,9 +11,6 @@ export default async function BlogUpdate({ params }: {
   }
 }) {
   const session = getSession()
-  if (!session) {
-    redirect("/")
-  }
 
   const id = params.slug
 
@@ -35,6 +33,11 @@ export default async function BlogUpdate({ params }: {
   }
 
   const blog = await getData()
+  const currentUser = session && await verifyToken(session)
+  const isCurrentUser = currentUser ? blog?.userId === currentUser?.id : false
+  if (!isCurrentUser) {
+    redirect("/")
+  }
 
   return (
     <main className="flex min-h-screen bg-secondary-100 flex-col items-center justify-between px-2 md:px-24">

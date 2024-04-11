@@ -6,6 +6,7 @@ export type User = z.infer<typeof UserResponse>;
 export type EditUser = z.infer<typeof EditUserSchema>;
 
 export type EditUserResponse = responseData<EditUser>;
+export type CreateUserResponse = responseData<CreateUser>;
 
 export const CreateUserSchema = z.object({
   name: z.string().nonempty({ message: "Name cannot be empty" }),

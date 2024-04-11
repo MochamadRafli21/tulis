@@ -2,17 +2,38 @@
 
 import { db } from "@/libs/database";
 import { user } from "@/libs/database/schema";
-import { eq } from "drizzle-orm";
 import { CreateUser, EditUser } from "@/libs/zod/schema";
+import { generateEmailVerificationToken } from "@/libs/services/email";
+
+import { eq } from "drizzle-orm";
+import * as argon from "argon2";
 
 export const storeUser = async ({ name, email, password }: CreateUser) => {
+
+  const emailToken = generateEmailVerificationToken();
+  const passwordHash = await argon.hash(password);
+
   const data = await db
     .insert(user)
     .values({
       name,
       email,
-      password
+      password: passwordHash,
+      verification_token: emailToken,
+      is_verified: false
     })
+    .returning();
+  return data[0];
+}
+
+export const activateUser = async (token: string) => {
+  const data = await db
+    .update(user)
+    .set({
+      is_verified: true,
+      verification_token: null
+    })
+    .where(eq(user.verification_token, token))
     .returning();
   return data[0];
 }

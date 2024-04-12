@@ -1,7 +1,7 @@
 "use server"
 
 import { db } from "@/libs/database";
-import { blog, bloguser } from "@/libs/database/schema";
+import { blog, bloguser, user } from "@/libs/database/schema";
 import { Blog } from "@/libs/zod/schema";
 import { eq, desc, and, ilike, or } from "drizzle-orm";
 import DOMPurify from "isomorphic-dompurify";
@@ -63,13 +63,19 @@ export const getBlogPublic = async (slug: string) => {
         content: blog.content,
         is_published: blog.is_published,
         userId: bloguser.userId,
-        blogId: bloguser.blogId
+        blogId: bloguser.blogId,
+        createdBy: {
+          id: bloguser.userId,
+          name: user.name,
+          avatar: user.avatar
+        }
       }
     )
     .from(blog)
     .where(eq(blog.slug, slug))
     .limit(1)
-    .innerJoin(bloguser, eq(blog.id, bloguser.blogId));
+    .innerJoin(bloguser, eq(blog.id, bloguser.blogId))
+    .innerJoin(user, eq(bloguser.userId, user.id));
 
   if (data.length > 0) {
     data[0].content = DOMPurify.sanitize(data[0].content);
@@ -90,12 +96,18 @@ export const getBlogById = async (id: string) => {
       content: blog.content,
       is_published: blog.is_published,
       userId: bloguser.userId,
-      blogId: bloguser.blogId
+      blogId: bloguser.blogId,
+      createdBy: {
+        id: bloguser.userId,
+        name: user.name,
+        avatar: user.avatar
+      }
     })
     .from(blog)
     .where(eq(blog.id, id))
     .limit(1)
-    .innerJoin(bloguser, eq(blog.id, bloguser.blogId));
+    .innerJoin(bloguser, eq(blog.id, bloguser.blogId))
+    .innerJoin(user, eq(bloguser.userId, user.id));
 
   if (data.length > 0) {
     data[0].content = DOMPurify.sanitize(data[0].content);
@@ -120,6 +132,11 @@ export const getBlogs = async (page?: number, pageSize?: number, q?: string) => 
       slug: blog.slug,
       userId: bloguser.userId,
       blogId: bloguser.blogId,
+      createdBy: {
+        id: bloguser.userId,
+        name: user.name,
+        avatar: user.avatar
+      }
     })
     .from(blog)
     .where(
@@ -137,11 +154,13 @@ export const getBlogs = async (page?: number, pageSize?: number, q?: string) => 
     )
     .limit(pageSize)
     .innerJoin(bloguser, eq(blog.id, bloguser.blogId))
+    .innerJoin(user, eq(bloguser.userId, user.id))
     .offset((page - 1) * pageSize)
     .orderBy(desc(blog.createdAt));
 
   if (data.length > 0) {
     data.forEach((item) => {
+      console.log(item.createdBy)
       item.content = DOMPurify.sanitize(item.content);
     });
   }

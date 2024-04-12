@@ -1,7 +1,7 @@
 "use server"
 
 import { db } from "@/libs/database";
-import { bloguser, blog } from "@/libs/database/schema";
+import { bloguser, blog, user } from "@/libs/database/schema";
 import { eq, desc } from "drizzle-orm";
 import DOMPurify from "isomorphic-dompurify";
 
@@ -53,9 +53,15 @@ export const getUserBlogs = async (userId: string, page?: number, pageSize?: num
       is_published: blog.is_published,
       userId: bloguser.userId,
       blogId: bloguser.blogId,
+      createdBy: {
+        id: user.id,
+        name: user.name,
+        avatar: user.avatar
+      }
     })
     .from(bloguser)
     .innerJoin(blog, eq(bloguser.blogId, blog.id))
+    .innerJoin(user, eq(bloguser.userId, user.id))
     .where(eq(bloguser.userId, userId))
     .limit(pageSize)
     .offset((page - 1) * pageSize)

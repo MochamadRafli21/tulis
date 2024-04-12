@@ -1,4 +1,6 @@
 export * from './blog-form'
 export * from './login-form'
 export * from './register-form'
+export * from './reset-pass-form'
+export * from './forget-form'
 export * from './profile-form'

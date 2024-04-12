@@ -1,8 +1,30 @@
 "use server"
-import { getUserById, updateUser, storeUser, getUserByEmail } from "@/libs/services/user"
-import { verifyToken, sendEmail, generateEmailVerificationLink } from "@/libs/services"
+import {
+  getUserById,
+  updateUser,
+  storeUser,
+  getUserByEmail,
+  requestForgetPassword,
+  setPasswordWithToken
+} from "@/libs/services/user"
+import {
+  verifyToken,
+  findUserToken,
+  sendEmail,
+  generateEmailVerificationLink,
+  generatePasswordResetLink
+} from "@/libs/services"
 import { getSession } from "@/libs/utils"
-import { EditUserSchema, EditUserResponse, CreateUserSchema, CreateUserResponse } from "@/libs/zod/schema"
+import {
+  EditUserSchema,
+  EditUserResponse,
+  CreateUserSchema,
+  CreateUserResponse,
+  NewPasswordSchema,
+  ForgetPasswordSchema,
+  ForgetPasswordResponse,
+  NewPasswordResponse
+} from "@/libs/zod/schema"
 import { ZodError } from "zod"
 import { revalidatePath } from "next/cache"
 
@@ -261,4 +283,133 @@ export async function registerUser(prevData: CreateUserResponse, formData: FormD
       } as CreateUserResponse
     }
   }
+}
+
+export const forgetPassword = async (prevState: ForgetPasswordResponse, formData: FormData) => {
+  const email = formData.get("email") as string
+
+  const payload = ForgetPasswordSchema.parse({
+    email
+  })
+
+  const user = await getUserByEmail(email)
+  if (!user) {
+    return {
+      "errors": {
+        "email": "Email not found"
+      },
+      "message": "Email not found",
+      "data": {
+        "email": ""
+      }
+    }
+  }
+
+  const { verification_token } = await requestForgetPassword(payload.email)
+
+  if (!verification_token) {
+    return {
+      "errors": {
+        "email": "Failed To Send Email"
+      },
+      "message": "Failed To Send Email",
+      "data": {
+        "email": ""
+      }
+    }
+  }
+
+  const verificationLink = generatePasswordResetLink(verification_token)
+  sendEmail(
+    user.email,
+    "Tulis Email Verification",
+    `Please Click On The Link To Verify Your Email: ${verificationLink}`
+  )
+  return {
+    "errors": undefined,
+    "message": "Request sent successfully",
+    "data": {
+      "email": user.email
+    }
+  }
+
+}
+
+
+export const updateUserPasswordByToken = async (token: string, formData: FormData) => {
+  const password = formData.get("password") as string
+  try {
+
+    const payload = NewPasswordSchema.parse({
+      password
+    })
+
+    const data = await setPasswordWithToken(token, payload.password)
+
+    if (!data) {
+      return {
+        "errors": {
+          "email": "",
+          "password": "",
+          "access_token": "Failed To Verify Token, Please Try Again Later"
+        },
+        "message": "Activation failed",
+        "data": {
+          "email": "",
+          "password": "",
+          "access_token": ""
+        }
+      }
+    }
+
+    return {
+      "errors": undefined,
+      "message": "Activation successful",
+      "data": {
+        "email": data.email,
+        "access_token": token
+      }
+    }
+
+  } catch (error) {
+    if (error instanceof ZodError) {
+      const zodError = error as ZodError
+      const errorMap = zodError.flatten().fieldErrors
+      return {
+        "errors": {
+          "password": errorMap.password?.[0] ?? ""
+        },
+        "message": "Failed to update profile",
+        "data": {
+          password
+        }
+      } as NewPasswordResponse
+    } else {
+      return {
+        "errors": {
+          "password": ""
+        },
+        "message": "Failed to Create User",
+        "data": {
+          password
+        }
+      } as NewPasswordResponse
+    }
+  }
+
+}
+
+export const isVerificationCodeValid = async (token: string) => {
+  const data = await findUserToken(token)
+  if (!data) {
+    return false
+  }
+  return {
+    "errors": undefined,
+    "message": "Activation successful",
+    "data": {
+      "email": data.email,
+      "access_token": token
+    }
+  };
 }

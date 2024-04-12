@@ -12,7 +12,10 @@ export {
   getUserById,
   getUserByEmail,
   getUserList,
-  activateUser
+  activateUser,
+  requestForgetPassword,
+  setPasswordWithToken,
+  findUserToken
 } from "./user"
 export {
   storeBlogUser,

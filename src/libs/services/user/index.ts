@@ -38,6 +38,39 @@ export const activateUser = async (token: string) => {
   return data[0];
 }
 
+export const findUserToken = async (token: string) => {
+  const data = await db
+    .select()
+    .from(user)
+    .where(eq(user.verification_token, token))
+    .limit(1);
+  return data[0];
+}
+
+export const requestForgetPassword = async (email: string) => {
+  const data = await db
+    .update(user)
+    .set({
+      verification_token: generateEmailVerificationToken()
+    })
+    .where(eq(user.email, email))
+    .returning();
+  return data[0];
+}
+
+export const setPasswordWithToken = async (token: string, password: string) => {
+  const passwordHash = await argon.hash(password);
+  const data = await db
+    .update(user)
+    .set({
+      password: passwordHash,
+      verification_token: null
+    })
+    .where(eq(user.verification_token, token))
+    .returning();
+  return data[0];
+}
+
 export const updateUser = async (id: string, { name, avatar, banner, bio }: EditUser) => {
   const data = await db
     .update(user)

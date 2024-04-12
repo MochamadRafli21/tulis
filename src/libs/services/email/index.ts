@@ -17,3 +17,7 @@ export const generateEmailVerificationToken = () => {
 export const generateEmailVerificationLink = (token: string) => {
   return `${process.env.CLIENT_URL}/verify-email/${token}`
 }
+
+export const generatePasswordResetLink = (token: string) => {
+  return `${process.env.CLIENT_URL}/forget/reset/${token}`
+}

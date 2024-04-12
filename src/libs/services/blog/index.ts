@@ -160,7 +160,6 @@ export const getBlogs = async (page?: number, pageSize?: number, q?: string) => 
 
   if (data.length > 0) {
     data.forEach((item) => {
-      console.log(item.createdBy)
       item.content = DOMPurify.sanitize(item.content);
     });
   }

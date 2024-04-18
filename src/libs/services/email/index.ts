@@ -1,11 +1,15 @@
 import { nodemailerClient } from '@/libs/utils/nodemailer'
 
 export const sendEmail = async (to: string, subject: string, text: string) => {
-  await nodemailerClient.sendMail({
-    from: process.env.SMTP_USER,
-    to,
-    subject,
-    text
+  await new Promise((resolve, reject) => {
+    nodemailerClient.sendMail({
+      from: process.env.SMTP_USER,
+      to,
+      subject,
+      text
+    })
+      .then(resolve)
+      .catch(reject)
   })
 }
 

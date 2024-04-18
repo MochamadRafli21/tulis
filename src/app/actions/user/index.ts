@@ -216,7 +216,7 @@ export async function registerUser(prevData: CreateUserResponse, formData: FormD
         } as CreateUserResponse
       } else if (existingUser?.is_verified === false) {
         const verificationLink = generateEmailVerificationLink(existingUser.verification_token as string)
-        sendEmail(
+        await sendEmail(
           existingUser.email,
           "Tulis Email Verification",
           `Please Click On The Link To Verify Your Email: ${verificationLink}`
@@ -235,7 +235,7 @@ export async function registerUser(prevData: CreateUserResponse, formData: FormD
       const user = await storeUser(payload)
 
       const verificationLink = generateEmailVerificationLink(user.verification_token as string)
-      sendEmail(
+      await sendEmail(
         user.email,
         "Tulis Email Verification",
         `Please Click On The Link To Verify Your Email: ${verificationLink}`
@@ -320,7 +320,7 @@ export const forgetPassword = async (prevState: ForgetPasswordResponse, formData
   }
 
   const verificationLink = generatePasswordResetLink(verification_token)
-  sendEmail(
+  await sendEmail(
     user.email,
     "Tulis Email Verification",
     `Please Click On The Link To Verify Your Email: ${verificationLink}`

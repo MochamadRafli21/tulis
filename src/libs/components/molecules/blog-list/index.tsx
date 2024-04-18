@@ -47,7 +47,7 @@ export default function BlogList({ userId }: { userId?: string }) {
         subtitle: blog.subtitle ?? "",
         banner: blog.banner ?? "",
         slug: blog.slug,
-        content: `<p>${blog.content.replaceAll(/<.*?>/g, "").substring(0, 200)}</p>`,
+        content: `<p class="line-clamp-3">${blog.content.replaceAll(/<.*?>/g, "").substring(0, 200)}</p>`,
         is_published: blog.is_published,
         createdBy: {
           id: blog.createdBy.id,
@@ -88,7 +88,7 @@ export default function BlogList({ userId }: { userId?: string }) {
                   <p className="text-gray-500">{blog.subtitle}</p>
                 }
               </div>
-              <QuilContent className="!h-fit text-gray-400 line-clamp-3 truncate" content={blog.content} />
+              <QuilContent className="!h-fit text-gray-400" content={blog.content} />
             </Link>
             <div className="px-3 py-2 text-gray-500 flex text-xs justify-between items-center">
               <Link href={`/user/${blog.createdBy.id}`} className="flex items-center gap-2">

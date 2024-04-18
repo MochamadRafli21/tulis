@@ -1,11 +1,13 @@
 import { getBlogBySlug } from "@/app/actions";
 import { verifyToken } from "@/libs/services";
 import { Button, QuilContent } from "@/libs/components/atoms";
-import Link from "next/link"
-import Image from "next/image"
 import { getSession } from "@/libs/utils";
 import { NavBar } from "@/libs/components/organisms/navbar";
+import { LoginOverlay } from "@/libs/components/molecules/login-overlay";
+
 import { SquarePen } from "lucide-react"
+import Link from "next/link"
+import Image from "next/image"
 
 export default async function BlogDetail({ params }: {
   params: {
@@ -42,7 +44,7 @@ export default async function BlogDetail({ params }: {
         }
       </NavBar>
 
-      <div className="p-8 max-w-5xl w-full lg:w-3/5">
+      <div className="p-8 max-w-5xl w-full lg:w-3/5 relative">
         {
 
           blog?.banner &&
@@ -60,8 +62,12 @@ export default async function BlogDetail({ params }: {
           <h1 className="text-[42px] font-bold">{blog?.title}</h1>
           <h2 className="text-2xl text-gray-500 mt-5 mb-6">{blog?.subtitle}</h2>
         </div>
-        <QuilContent className="mt-2" content={blog ? blog.content : ""} />
+        <QuilContent className={"mt-2 " + !session && "!h-[800px] overflow-hidden"} content={blog ? blog.content : ""} />
       </div>
+      {
+        !session &&
+        <LoginOverlay />
+      }
     </main >
   )
 }

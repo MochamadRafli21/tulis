@@ -6,6 +6,7 @@ import ContentDisplay from './content-display';
 import ContentHidden from './content-hidden';
 import TriggerDisplay from './trigger-display';
 import TriggerFocusDisplay from './trigger-focus';
+import TriggerScroll from './trigger-scroll';
 
 function SetDisplay({ children, defaultOn }: { children: React.ReactNode, defaultOn?: boolean }) {
   const [on, setOn] = useState(defaultOn ?? false);
@@ -40,5 +41,6 @@ SetDisplay.ShowContent = ContentDisplay;
 SetDisplay.HideContent = ContentHidden;
 SetDisplay.ToggleDisplay = TriggerDisplay;
 SetDisplay.ToggleFocusDisplay = TriggerFocusDisplay;
+SetDisplay.ScrollTrigger = TriggerScroll;
 
 export default SetDisplay;

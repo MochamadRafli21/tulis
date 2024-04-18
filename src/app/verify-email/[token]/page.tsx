@@ -1,9 +1,16 @@
 import { verifyEmail } from "@/app/actions";
 import Card from "@/libs/components/molecules/card";
+import { redirect } from "next/navigation";
+
 
 export default async function Activate({ params }: { params: { token: string } }) {
 
   const verified = await verifyEmail(params.token)
+  if (verified) {
+    setTimeout(() => {
+      redirect('/login')
+    }, 3000)
+  }
   return (
     <main className="flex min-h-screen flex-col justify-center place-items-center">
       <Card className="p-6 w-full md:w-[300px] bg-white bg-opacity-95 backdrop-filter backdrop-blur-xl ">

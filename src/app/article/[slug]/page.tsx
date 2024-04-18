@@ -33,7 +33,7 @@ export default async function BlogDetail({ params }: {
         className="w-full"
       >
         {isCurrentUser &&
-          <Link href={`/blog/${blog?.id}/edit`}>
+          <Link href={`/article/${blog?.id}/edit`}>
             <Button variant="bordered" className="p-1 px-2 text-secondary flex gap-2 items-center">
               <SquarePen />
               <h1 className="">Edit</h1>

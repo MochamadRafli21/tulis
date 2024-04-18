@@ -71,7 +71,7 @@ export default function BlogList({ userId }: { userId?: string }) {
       {blogs.map((blog) => {
         return (
           <Card className="mb-3 py-2 break-inside-avoid h-fit horver:bg-gray-100" key={blog.slug}>
-            <Link href={`/blog/${blog.slug}`}>
+            <Link href={`/article/${blog.slug}`}>
               <div className="px-4 py-2">
                 {blog.banner &&
                   <div className="relative w-full h-[150px]">

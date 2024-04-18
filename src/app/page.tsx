@@ -16,8 +16,14 @@ export default async function Home() {
         isSearchable={true}
         className="w-full"
       >
-        {session &&
-          <Link href="/blog/add">
+        {session ?
+          <Link href="/article/add">
+            <Button variant="bordered" className="p-1 px-2 text-secondary flex gap-2 items-center">
+              <SquarePen />
+              <h1 className="">Tulis</h1>
+            </Button>
+          </Link> :
+          <Link href="/login">
             <Button variant="bordered" className="p-1 px-2 text-secondary flex gap-2 items-center">
               <SquarePen />
               <h1 className="">Tulis</h1>

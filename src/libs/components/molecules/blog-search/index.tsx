@@ -22,7 +22,7 @@ export default function BlogSearch() {
   const [data, setData] = useState<itemList[]>([]);
 
   const openBlog = (slug: string) => {
-    router.push("/blog/" + slug)
+    router.push("/article/" + slug)
   }
 
   const submitSearch = () => {

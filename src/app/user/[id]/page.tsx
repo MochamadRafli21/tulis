@@ -29,7 +29,7 @@ export default async function User({ params }: { params: { id: string } }) {
         className="w-full"
       >
         {session &&
-          <Link href="/blog/add">
+          <Link href="/article/add">
             <Button variant="bordered" className="p-1 px-2 text-secondary flex gap-2 items-center">
               <SquarePen />
               <h1 className="">Tulis</h1>

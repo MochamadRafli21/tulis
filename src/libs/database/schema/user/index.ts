@@ -1,5 +1,7 @@
 import { pgTable, text, uuid, boolean } from 'drizzle-orm/pg-core';
 import { baseSchema } from '../base';
+import { bloguser } from '../bloguser';
+import { relations } from 'drizzle-orm';
 
 export const user = pgTable('user', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -13,3 +15,10 @@ export const user = pgTable('user', {
   verification_token: text('verification_token').default(''),
   ...baseSchema,
 });
+
+export const userRelations = relations(user, ({ one }) => ({
+  bloguser: one(bloguser, {
+    fields: [user.id],
+    references: [bloguser.userId],
+  })
+}));

@@ -16,6 +16,7 @@ export default async function Login() {
     }
     return response
   }
+
   return (
     <main className="flex min-h-screen flex-col justify-center place-items-center">
       <Card className="p-6 w-full md:w-[300px] bg-white bg-opacity-95 backdrop-filter backdrop-blur-xl ">

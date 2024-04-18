@@ -109,7 +109,6 @@ export default function BlogSearch() {
                                 className='cursor-pointer px-2 py-1 rounded'
                                 onClick={(e) => {
                                   e.stopPropagation()
-                                  console.log(e)
                                   searchInputRef.current?.focus()
                                   submitSearch()
                                 }}
@@ -126,7 +125,6 @@ export default function BlogSearch() {
                                     className='cursor-pointer px-2 py-1 rounded'
                                     onClick={(e) => {
                                       e.stopPropagation()
-                                      console.log(e)
                                       searchInputRef.current?.focus()
                                       openBlog(item.slug)
                                     }}

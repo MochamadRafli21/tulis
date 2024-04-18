@@ -2,6 +2,7 @@
 
 import { Blog } from "@/libs/zod/schema";
 import { getBlogs } from "@/libs/services/blog";
+import { getUserBlogs } from "@/libs/services/bloguser";
 import Card from "@/libs/components/molecules/card";
 import InfiniteScroll from "@/libs/components/atoms/infinite-scroll";
 import { QuilContent } from "@/libs/components/atoms";
@@ -13,9 +14,19 @@ import Image from "next/image";
 import { useSearchParams } from 'next/navigation'
 
 
-type itemList = Blog & { slug: string, id: string, content: string }
+type itemList = Blog & {
+  slug: string,
+  id: string,
+  content: string,
+  createdBy: {
+    id: string,
+    name: string,
+    avatar: string
+  },
+  createdAt: string
+}
 
-export default function BlogList() {
+export default function BlogList({ userId }: { userId?: string }) {
   const query = useSearchParams()?.get("q") as string
   const [blogs, setBlogs] = useState<itemList[]>([]);
   const page = 1
@@ -24,18 +35,26 @@ export default function BlogList() {
 
   const getMoreData = async (page: number) => {
     const res = async () => {
-      const apiBlogs = await getBlogs(page, 10, query)
+      const apiBlogs = userId ? await getUserBlogs(userId, page, 10) : await getBlogs(page, 10, query)
       return apiBlogs
     }
     const data = await res()
     if (data.length === 0) return true
     const mappedData: itemList[] = data.map((blog) => {
       return {
+        id: blog.id,
         title: blog.title,
         subtitle: blog.subtitle ?? "",
         banner: blog.banner ?? "",
         slug: blog.slug,
         content: `<p>${blog.content.replaceAll(/<.*?>/g, "").substring(0, 200)}</p>`,
+        is_published: blog.is_published,
+        createdBy: {
+          id: blog.createdBy.id,
+          name: blog.createdBy.name,
+          avatar: blog.createdBy.avatar
+        },
+        createdAt: blog.createdAt ? new Date(blog.createdAt).toLocaleDateString() : "",
       } as itemList
     })
     setBlogs([...blogs, ...mappedData])
@@ -71,10 +90,29 @@ export default function BlogList() {
               </div>
               <QuilContent className="!h-fit text-gray-400 line-clamp-3 truncate" content={blog.content} />
             </Link>
+            <div className="px-3 py-2 text-gray-500 flex text-xs justify-between items-center">
+              <Link href={`/user/${blog.createdBy.id}`} className="flex items-center gap-2">
+                {
+                  blog.createdBy?.avatar &&
+                  <div className="w-8 h-8 rounded-full overflow-hidden">
+                    <Image
+                      width={32}
+                      height={32}
+                      className="w-8 h-8 rounded-full"
+                      src={blog.createdBy?.avatar ?? ""}
+                      alt="avatar"
+                    />
+                  </div>
+                }
+                <p>{blog.createdBy?.name}</p>
+              </Link>
+              <p>{blog.createdAt}</p>
+            </div>
           </Card>
         )
       })}
       <InfiniteScroll.Trigger ref={scrollTriggerRef} />
+      <div className="h-10"></div>
     </InfiniteScroll>
   );
 }

@@ -2,17 +2,71 @@
 
 import { db } from "@/libs/database";
 import { user } from "@/libs/database/schema";
-import { eq } from "drizzle-orm";
 import { CreateUser, EditUser } from "@/libs/zod/schema";
+import { generateEmailVerificationToken } from "@/libs/services/email";
+
+import { eq } from "drizzle-orm";
+import * as argon from "argon2";
 
 export const storeUser = async ({ name, email, password }: CreateUser) => {
+
+  const emailToken = generateEmailVerificationToken();
+  const passwordHash = await argon.hash(password);
+
   const data = await db
     .insert(user)
     .values({
       name,
       email,
-      password
+      password: passwordHash,
+      verification_token: emailToken,
+      is_verified: false
     })
+    .returning();
+  return data[0];
+}
+
+export const activateUser = async (token: string) => {
+  const data = await db
+    .update(user)
+    .set({
+      is_verified: true,
+      verification_token: null
+    })
+    .where(eq(user.verification_token, token))
+    .returning();
+  return data[0];
+}
+
+export const findUserToken = async (token: string) => {
+  const data = await db
+    .select()
+    .from(user)
+    .where(eq(user.verification_token, token))
+    .limit(1);
+  return data[0];
+}
+
+export const requestForgetPassword = async (email: string) => {
+  const data = await db
+    .update(user)
+    .set({
+      verification_token: generateEmailVerificationToken()
+    })
+    .where(eq(user.email, email))
+    .returning();
+  return data[0];
+}
+
+export const setPasswordWithToken = async (token: string, password: string) => {
+  const passwordHash = await argon.hash(password);
+  const data = await db
+    .update(user)
+    .set({
+      password: passwordHash,
+      verification_token: null
+    })
+    .where(eq(user.verification_token, token))
     .returning();
   return data[0];
 }

@@ -1,4 +1,5 @@
-import { getBlogBySlug, getUser } from "@/app/actions";
+import { getBlogBySlug } from "@/app/actions";
+import { verifyToken } from "@/libs/services";
 import { Button, QuilContent } from "@/libs/components/atoms";
 import Link from "next/link"
 import Image from "next/image"
@@ -11,8 +12,6 @@ export default async function BlogDetail({ params }: {
     slug: string
   }
 }) {
-  const user = await getUser()
-
   const session = getSession()
 
   const slug = params.slug
@@ -23,15 +22,17 @@ export default async function BlogDetail({ params }: {
   }
 
   const blog = await getData()
+  const currentUser = session && await verifyToken(session)
+  const isCurrentUser = currentUser ? blog?.userId === currentUser?.id : false
 
   return (
     <main className="flex min-h-screen flex-col items-center">
       <NavBar
-        title={user?.name.split(" ")[0] ?? ""}
+        title="Tulis"
         isSearchable={true}
         className="w-full"
       >
-        {session &&
+        {isCurrentUser &&
           <Link href={`/blog/${blog?.id}/edit`}>
             <Button variant="bordered" className="p-1 px-2 text-secondary flex gap-2 items-center">
               <SquarePen />

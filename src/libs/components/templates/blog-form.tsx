@@ -1,5 +1,5 @@
 "use client"
-import { NavBar } from "../organisms"
+import { Header } from "../organisms"
 import { Quill, Label, TextArea } from "../atoms"
 import { SubmitButton } from "../molecules"
 import SubtitleInput from "../molecules/subtitle-input"
@@ -44,7 +44,7 @@ export const BlogForm: FC<BlogFormProps> = ({ onSubmit, onDelete, data }) => {
 
   return (
     <>
-      <NavBar
+      <Header
         title={onDelete ? "Edit" : "Create"}
       >
         <div></div>
@@ -65,7 +65,7 @@ export const BlogForm: FC<BlogFormProps> = ({ onSubmit, onDelete, data }) => {
             <h1>Simpan</h1>
           </SubmitButton>
         </div>
-      </NavBar>
+      </Header>
 
       <form id="submitForm" action={formAction}>
 

@@ -218,7 +218,7 @@ export async function registerUser(prevData: CreateUserResponse, formData: FormD
         const verificationLink = generateEmailVerificationLink(existingUser.verification_token as string)
         await sendEmail(
           existingUser.email,
-          "Tulis Email Verification",
+          "PageUp Email Verification",
           `Please Click On The Link To Verify Your Email: ${verificationLink}`
         )
         return {
@@ -237,7 +237,7 @@ export async function registerUser(prevData: CreateUserResponse, formData: FormD
       const verificationLink = generateEmailVerificationLink(user.verification_token as string)
       await sendEmail(
         user.email,
-        "Tulis Email Verification",
+        "PageUp Email Verification",
         `Please Click On The Link To Verify Your Email: ${verificationLink}`
       )
       return {
@@ -322,7 +322,7 @@ export const forgetPassword = async (prevState: ForgetPasswordResponse, formData
   const verificationLink = generatePasswordResetLink(verification_token)
   await sendEmail(
     user.email,
-    "Tulis Email Verification",
+    "PageUp Email Verification",
     `Please Click On The Link To Verify Your Email: ${verificationLink}`
   )
   return {

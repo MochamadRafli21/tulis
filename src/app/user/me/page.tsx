@@ -1,7 +1,7 @@
 import { Button, MasonryContainer, QuilContent } from "@/libs/components/atoms";
 import Card from "@/libs/components/molecules/card";
 import BlogList from "@/libs/components/molecules/blog-list";
-import { Header } from "@/libs/components/organisms/header";
+import { Header } from "@/libs/components/organisms";
 import { getUser } from "@/app/actions";
 import { getSession } from "@/libs/utils";
 import { verifyToken } from "@/libs/services";
@@ -9,12 +9,16 @@ import { verifyToken } from "@/libs/services";
 import Image from "next/image"
 import Link from "next/link"
 import { SquarePen } from "lucide-react"
+import { redirect } from "next/navigation"
 
-export default async function User({ params }: { params: { id: string } }) {
-  const user = await getUser(params.id)
+export default async function UserMe() {
   const session = getSession()
   const currentUser = session && await verifyToken(session)
-  const isCurrentUser = currentUser ? user?.id === currentUser?.id : false
+  if (!currentUser) {
+    redirect('/')
+  }
+  const user = await getUser(currentUser.id)
+  const isCurrentUser = currentUser.id ?? false
   if (user && !user?.banner) {
     const placholderImage = await fetch('https://source.unsplash.com/random/?write')
     user.banner = placholderImage.url
@@ -88,7 +92,6 @@ export default async function User({ params }: { params: { id: string } }) {
         </div>
 
       </div>
-
 
     </main>
   )

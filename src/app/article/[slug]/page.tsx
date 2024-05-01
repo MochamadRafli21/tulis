@@ -2,7 +2,7 @@ import { getBlogBySlug } from "@/app/actions";
 import { verifyToken } from "@/libs/services";
 import { Button, QuilContent } from "@/libs/components/atoms";
 import { getSession } from "@/libs/utils";
-import { NavBar } from "@/libs/components/organisms/navbar";
+import { Header } from "@/libs/components/organisms";
 import { LoginOverlay } from "@/libs/components/molecules/login-overlay";
 
 import { SquarePen } from "lucide-react"
@@ -29,8 +29,8 @@ export default async function BlogDetail({ params }: {
 
   return (
     <main className="flex min-h-screen flex-col items-center">
-      <NavBar
-        title="Tulis"
+      <Header
+        title="PageUp"
         isSearchable={true}
         className="w-full"
       >
@@ -42,7 +42,7 @@ export default async function BlogDetail({ params }: {
             </Button>
           </Link>
         }
-      </NavBar>
+      </Header>
 
       <div className="p-8 max-w-5xl w-full lg:w-3/5 relative">
         {

@@ -101,43 +101,46 @@ export default function BlogSearch() {
                 <div className='relative'>
                   <div className='absolute'>
                     <div className='flex flex-col'>
-                      <Card className='bg-white px-2 py-3 h-fit max-h-[300px] overflow-y-auto'>
-                        <div className='flex flex-col'>
-                          <SelectProvider.Content >
-                            {value &&
-                              <div
-                                className='cursor-pointer px-2 py-1 rounded'
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  searchInputRef.current?.focus()
-                                  submitSearch()
-                                }}
-                                key={-1}
-                              >
-                                {value ? value + "..." : "Search..."}
-                              </div>
+                      {
+                        value &&
+                        <Card className='bg-white px-2 py-3 min-h-[30px] max-h-[300px] overflow-y-auto'>
+                          <div className='flex flex-col'>
+                            <SelectProvider.Content >
+                              {value &&
+                                <div
+                                  className='cursor-pointer px-2 py-1 rounded'
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    searchInputRef.current?.focus()
+                                    submitSearch()
+                                  }}
+                                  key={-1}
+                                >
+                                  {value ? value + "..." : "Search..."}
+                                </div>
 
-                            }
-                            {
-                              data.map((item) => {
-                                return (
-                                  <div
-                                    className='cursor-pointer px-2 py-1 rounded'
-                                    onClick={(e) => {
-                                      e.stopPropagation()
-                                      searchInputRef.current?.focus()
-                                      openBlog(item.slug)
-                                    }}
-                                    key={data.indexOf(item)}
-                                  >
-                                    {item.title}
-                                  </div>
-                                )
-                              })
-                            }
-                          </SelectProvider.Content>
-                        </div>
-                      </Card>
+                              }
+                              {
+                                data.map((item) => {
+                                  return (
+                                    <div
+                                      className='cursor-pointer px-2 py-1 rounded'
+                                      onClick={(e) => {
+                                        e.stopPropagation()
+                                        searchInputRef.current?.focus()
+                                        openBlog(item.slug)
+                                      }}
+                                      key={data.indexOf(item)}
+                                    >
+                                      {item.title}
+                                    </div>
+                                  )
+                                })
+                              }
+                            </SelectProvider.Content>
+                          </div>
+                        </Card>
+                      }
                     </div>
 
                   </div>

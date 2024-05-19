@@ -1,8 +1,7 @@
-import './globals.css'
+import '../globals.css'
 import 'react-quill/dist/quill.snow.css';
 import type { Metadata } from 'next'
 import { Poppins } from 'next/font/google'
-import MobileNavBar from '@/libs/components/organisms/mobile-navbar';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -12,7 +11,9 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: 'PageUp',
+  title: 'PageUp | Login',
+  description: "Starting Your Morning With New Page"
+
 }
 
 export default function RootLayout({
@@ -24,9 +25,6 @@ export default function RootLayout({
     <html lang="en">
       <body className={poppins.className}>
         {children}
-        <div>
-          <MobileNavBar />
-        </div>
       </body>
     </html>
   )

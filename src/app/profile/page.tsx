@@ -1,11 +1,11 @@
 import { ProfileForm } from "@/libs/components/templates";
 import { getCurrentUser, updateProfile } from "@/app/actions";
-import { getSession } from "@/libs/utils";
+import { getSession } from "@/libs/services";
 
 import { redirect } from "next/navigation"
 
 export default async function Profile() {
-  const session = getSession()
+  const session = await getSession()
 
   const user = await getCurrentUser()
   if (!session) {

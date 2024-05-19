@@ -3,8 +3,7 @@ import Card from "@/libs/components/molecules/card";
 import BlogList from "@/libs/components/molecules/blog-list";
 import { Header } from "@/libs/components/organisms/header";
 import { getUser } from "@/app/actions";
-import { getSession } from "@/libs/utils";
-import { verifyToken } from "@/libs/services";
+import { verifyToken, getSession } from "@/libs/services";
 
 import Image from "next/image"
 import Link from "next/link"
@@ -12,7 +11,7 @@ import { SquarePen } from "lucide-react"
 
 export default async function User({ params }: { params: { id: string } }) {
   const user = await getUser(params.id)
-  const session = getSession()
+  const session = await getSession()
   const currentUser = session && await verifyToken(session)
   const isCurrentUser = currentUser ? user?.id === currentUser?.id : false
   if (user && !user?.banner) {

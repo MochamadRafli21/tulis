@@ -14,7 +14,7 @@ import {
   generateEmailVerificationLink,
   generatePasswordResetLink
 } from "@/libs/services"
-import { getSession } from "@/libs/utils"
+import { getSession } from "@/libs/services"
 import {
   EditUserSchema,
   EditUserResponse,
@@ -42,7 +42,7 @@ export async function getUser(id: string) {
 
 export async function getCurrentUser() {
   try {
-    const session = getSession()
+    const session = await getSession()
     if (!session) {
       throw new Error("User not found")
     }
@@ -70,7 +70,7 @@ export async function updateProfile(prevData: EditUserResponse, formData: FormDa
   const banner = formData.get("banner") as string;
 
   try {
-    const session = getSession()
+    const session = await getSession()
     if (!session) {
       return {
         "errors": {

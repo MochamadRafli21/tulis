@@ -1,7 +1,7 @@
 import { getBlogBySlug } from "@/app/actions";
 import { verifyToken } from "@/libs/services";
 import { Button, QuilContent } from "@/libs/components/atoms";
-import { getSession } from "@/libs/utils";
+import { getSession } from "@/libs/services";
 import { Header } from "@/libs/components/organisms";
 import { LoginOverlay } from "@/libs/components/molecules/login-overlay";
 
@@ -14,7 +14,7 @@ export default async function BlogDetail({ params }: {
     slug: string
   }
 }) {
-  const session = getSession()
+  const session = await getSession()
 
   const slug = params.slug
 

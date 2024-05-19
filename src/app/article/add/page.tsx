@@ -1,10 +1,10 @@
 import { createBlog } from "@/app/actions";
 import { redirect } from "next/navigation";
 import { BlogForm } from "@/libs/components";
-import { getSession } from "@/libs/utils";
-export default function BlogAdd() {
+import { getSession } from "@/libs/services";
+export default async function BlogAdd() {
 
-  const session = getSession()
+  const session = await getSession()
   if (!session) {
     redirect("/")
   }

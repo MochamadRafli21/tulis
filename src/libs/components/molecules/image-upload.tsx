@@ -21,6 +21,7 @@ export default function ImageUpload({
   const setImage = async (e: any) => {
     const file = e.target.files[0];
     const link = await uploadFile(file);
+    console.log(link)
     setValue(link);
     const newChild = React.Children.map(children, (child) => {
       return React.cloneElement(child as React.ReactElement, { src: link })

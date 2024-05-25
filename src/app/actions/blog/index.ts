@@ -13,8 +13,7 @@ import {
   deleteBlogUser
 } from "@/libs/services"
 import { revalidatePath } from "next/cache"
-import { verifyToken } from "@/libs/services"
-import { getSession } from "@/libs/utils"
+import { verifyToken, getSession } from "@/libs/services"
 import { BlogResponse, Blog } from "@/libs/zod/schema"
 import { ZodError } from "zod"
 
@@ -22,7 +21,7 @@ export async function createBlog(
   prevState: BlogResponse,
   formData: FormData
 ): Promise<BlogResponse> {
-  const session = getSession()
+  const session = await getSession()
   if (!session) {
     throw new Error("User not found")
   }
@@ -78,7 +77,7 @@ export async function createBlog(
 }
 
 export async function editBlog(id: string, formData: FormData): Promise<BlogResponse> {
-  const session = getSession()
+  const session = await getSession()
   if (!session) {
     throw new Error("User not found")
   }
@@ -147,7 +146,7 @@ export async function editBlog(id: string, formData: FormData): Promise<BlogResp
 }
 
 export async function removeBlog(id: string): Promise<BlogResponse> {
-  const session = getSession()
+  const session = await getSession()
   if (!session) {
     throw new Error("User not found")
   }

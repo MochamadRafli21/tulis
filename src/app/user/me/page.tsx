@@ -1,19 +1,23 @@
 import { Button, MasonryContainer, QuilContent } from "@/libs/components/atoms";
 import Card from "@/libs/components/molecules/card";
 import BlogList from "@/libs/components/molecules/blog-list";
-import { Header } from "@/libs/components/organisms/header";
+import { Header } from "@/libs/components/organisms";
 import { getUser } from "@/app/actions";
 import { verifyToken, getSession } from "@/libs/services";
 
 import Image from "next/image"
 import Link from "next/link"
 import { SquarePen } from "lucide-react"
+import { redirect } from "next/navigation"
 
-export default async function User({ params }: { params: { id: string } }) {
-  const user = await getUser(params.id)
+export default async function UserMe() {
   const session = await getSession()
   const currentUser = session && await verifyToken(session)
-  const isCurrentUser = currentUser ? user?.id === currentUser?.id : false
+  if (!currentUser) {
+    redirect('/')
+  }
+  const user = await getUser(currentUser.id)
+  const isCurrentUser = currentUser.id ?? false
   if (user && !user?.banner) {
     const placholderImage = await fetch('https://source.unsplash.com/random/?write')
     user.banner = placholderImage.url
@@ -26,16 +30,7 @@ export default async function User({ params }: { params: { id: string } }) {
         title="PageUp"
         isSearchable={true}
         className="w-full"
-      >
-        {session &&
-          <Link href="/article/add">
-            <Button variant="bordered" className="p-1 px-2 text-secondary flex gap-2 items-center">
-              <SquarePen />
-              <h1 className="">PageUp</h1>
-            </Button>
-          </Link>
-        }
-      </Header>
+      />
 
       <div className="w-full grid grid-cols-1 md:grid-cols-3 mt-4">
 
@@ -87,7 +82,6 @@ export default async function User({ params }: { params: { id: string } }) {
         </div>
 
       </div>
-
 
     </main>
   )

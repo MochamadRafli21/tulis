@@ -1,8 +1,7 @@
 import { editBlog, removeBlog, getBlogDetail } from "@/app/actions";
-import { verifyToken } from "@/libs/services";
+import { verifyToken, getSession } from "@/libs/services";
 import { BlogForm } from "@/libs/components";
 import { redirect } from "next/navigation";
-import { getSession } from "@/libs/utils";
 import { BlogResponse } from "@/libs/zod/schema";
 
 export default async function BlogUpdate({ params }: {
@@ -10,7 +9,7 @@ export default async function BlogUpdate({ params }: {
     slug: string
   }
 }) {
-  const session = getSession()
+  const session = await getSession()
 
   const id = params.slug
 

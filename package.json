@@ -15,6 +15,7 @@
     "@tailwindcss/line-clamp": "^0.4.4",
     "@types/nodemailer": "^6.4.14",
     "argon2": "^0.40.1",
+    "browser-image-compression": "^2.0.2",
     "class-variance-authority": "^0.7.0",
     "cloudinary": "^2.0.3",
     "dotenv": "^16.4.5",

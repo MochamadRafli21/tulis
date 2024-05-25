@@ -1,6 +1,8 @@
+"use server"
+
 import { createTransport } from 'nodemailer'
 
-export const nodemailerClient = createTransport({
+export const nodemailerClient = async () => createTransport({
   service: process.env.SMTP_HOST,
   secure: false,
   requireTLS: true,

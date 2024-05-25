@@ -1,6 +1,7 @@
 "use server"
 import { SignJWT, jwtVerify } from "jose"
 import { TokenPayload } from "@/libs/zod/schema/token"
+import { cookies } from 'next/headers'
 
 export async function generateToken(email: string, id: string) {
 
@@ -27,3 +28,6 @@ export async function verifyToken(token: string): Promise<TokenPayload> {
   return payload as TokenPayload
 }
 
+export async function getSession() {
+  return cookies().get('session')?.value
+}

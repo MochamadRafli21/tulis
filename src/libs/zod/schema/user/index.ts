@@ -34,9 +34,6 @@ export const NewPasswordSchema = z.object({
     .regex(/(?=.*\d)/, {
       message: "Password must contain at least one number",
     })
-    .regex(/(?=.*\W)/, {
-      message: "Password must contain at least one special character",
-    }),
 });
 
 export const CreateUserSchema = z.object({

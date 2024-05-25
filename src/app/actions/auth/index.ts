@@ -3,6 +3,7 @@ import { getUserByEmail, generateToken, activateUser } from "@/libs/services"
 import * as argon from "argon2"
 import { cookies } from 'next/headers'
 import { LoginResponse } from "@/libs/zod/schema"
+import { revalidatePath } from "next/cache"
 
 export async function createJWT(
   prevState: LoginResponse,
@@ -117,6 +118,7 @@ export const verifyEmail = async (token: string) => {
       }
     }
   }
+  revalidatePath("/login")
 
   return {
     "errors": undefined,
@@ -126,4 +128,14 @@ export const verifyEmail = async (token: string) => {
       "access_token": token
     }
   }
+}
+
+export const logout = async () => {
+  console.log('delete')
+  cookies().set('session', '', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: -1,
+    path: '/',
+  })
 }

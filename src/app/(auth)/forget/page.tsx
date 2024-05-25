@@ -3,6 +3,7 @@ import { ForgetPasswordResponse } from "@/libs/zod/schema"
 import Card from "@/libs/components/molecules/card";
 import { ForgetPasswordForm } from "@/libs/components/templates";
 
+import Link from "next/link"
 export default async function Forget() {
 
   const onSubmit = async (prevState: ForgetPasswordResponse, e: FormData) => {
@@ -16,6 +17,7 @@ export default async function Forget() {
       <Card className="p-6 w-full md:w-[300px] bg-white bg-opacity-95 backdrop-filter backdrop-blur-xl ">
         <h1 className="text-2xl font-semibold">Be Better Next Time</h1>
         <ForgetPasswordForm onSubmit={onSubmit} />
+        <Link href="/login" className="text-gray-400 text-sm mt-1"><p>Already have an account?</p></Link>
       </Card>
     </main>
   )

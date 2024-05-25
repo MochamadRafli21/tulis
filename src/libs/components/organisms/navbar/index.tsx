@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { SquarePen, Home, CircleUserRound, LogOut } from "lucide-react"
 import { Button } from "@/libs/components/atoms";
 import { getSession } from "@/libs/services";
+import { LogoutBtn } from '../../molecules/logout-button';
 
 interface NavBarProps {
   children?: React.ReactNode
@@ -54,11 +55,7 @@ export default async function NavBar({ children }: NavBarProps) {
           </div>
           {
             session ?
-              <Link href="/logout">
-                <Button variant="bordered" className="p-2 w-12 h-12 flex justify-center border-none items-center">
-                  <LogOut />
-                </Button>
-              </Link>
+              <LogoutBtn />
               : null
           }
         </div>

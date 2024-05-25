@@ -129,3 +129,13 @@ export const verifyEmail = async (token: string) => {
     }
   }
 }
+
+export const logout = async () => {
+  console.log('delete')
+  cookies().set('session', '', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: -1,
+    path: '/',
+  })
+}

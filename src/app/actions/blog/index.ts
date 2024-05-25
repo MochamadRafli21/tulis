@@ -77,7 +77,7 @@ export async function createBlog(
 }
 
 export async function editBlog(id: string, formData: FormData): Promise<BlogResponse> {
-  const session = getSession()
+  const session = await getSession()
   if (!session) {
     throw new Error("User not found")
   }
@@ -146,7 +146,7 @@ export async function editBlog(id: string, formData: FormData): Promise<BlogResp
 }
 
 export async function removeBlog(id: string): Promise<BlogResponse> {
-  const session = getSession()
+  const session = await getSession()
   if (!session) {
     throw new Error("User not found")
   }

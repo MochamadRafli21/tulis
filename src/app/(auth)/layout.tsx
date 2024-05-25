@@ -11,9 +11,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: 'PageUp | Verify Email',
-  description: "Email Verification File"
-
+  title: 'PageUp | Auth',
+  description: "Starting Your Morning With New Page"
 }
 
 export default function RootLayout({

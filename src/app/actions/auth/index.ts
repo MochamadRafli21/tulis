@@ -3,6 +3,7 @@ import { getUserByEmail, generateToken, activateUser } from "@/libs/services"
 import * as argon from "argon2"
 import { cookies } from 'next/headers'
 import { LoginResponse } from "@/libs/zod/schema"
+import { revalidatePath } from "next/cache"
 
 export async function createJWT(
   prevState: LoginResponse,
@@ -117,6 +118,7 @@ export const verifyEmail = async (token: string) => {
       }
     }
   }
+  revalidatePath("/login")
 
   return {
     "errors": undefined,

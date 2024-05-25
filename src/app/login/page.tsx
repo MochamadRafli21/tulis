@@ -4,6 +4,7 @@ import { createJWT } from "@/app/actions";
 import { getSession } from "@/libs/services";
 import { revalidatePath } from "next/cache";
 import { LoginResponse } from "@/libs/zod/schema"
+import Link from "next/link"
 
 export default async function Login() {
 
@@ -23,6 +24,8 @@ export default async function Login() {
         <Card className="p-6 w-full md:w-[300px] bg-white bg-opacity-95 backdrop-filter backdrop-blur-xl ">
           <h1 className="text-2xl font-semibold">Login</h1>
           <LoginForm onSubmit={onSubmit} />
+          <Link href="/register"><h1>Dont have an account?</h1></Link>
+          <Link href="/forget"><h1>Forget Password?</h1></Link>
         </Card>
       </div>
     </main>

@@ -30,16 +30,7 @@ export default async function UserMe() {
         title="PageUp"
         isSearchable={true}
         className="w-full"
-      >
-        {session &&
-          <Link href="/article/add">
-            <Button variant="bordered" className="p-1 px-2 text-secondary flex gap-2 items-center">
-              <SquarePen />
-              <h1 className="">PageUp</h1>
-            </Button>
-          </Link>
-        }
-      </Header>
+      />
 
       <div className="w-full grid grid-cols-1 md:grid-cols-3 mt-4">
 

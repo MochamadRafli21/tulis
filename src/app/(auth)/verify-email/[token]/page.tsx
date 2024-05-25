@@ -1,15 +1,14 @@
 import { verifyEmail } from "@/app/actions";
 import Card from "@/libs/components/molecules/card";
+import Link from "next/link"
 import { redirect } from "next/navigation";
 
 
 export default async function Activate({ params }: { params: { token: string } }) {
 
   const verified = await verifyEmail(params.token)
-  if (verified) {
-    setTimeout(() => {
-      redirect('/login')
-    }, 3000)
+  if (!verified.errors) {
+    redirect('/login')
   }
   return (
     <main className="flex min-h-screen flex-col justify-center items-center place-items-center">
@@ -18,7 +17,10 @@ export default async function Activate({ params }: { params: { token: string } }
           verified.errors ?
             <h1 className="text-2xl font-semibold">{verified.message}</h1>
             :
-            <h1 className="text-2xl font-semibold">Email Verified!</h1>
+            <>
+              <h1 className="text-2xl font-semibold">Email Verified!</h1>
+              <Link href="/login" className="text-gray-400 text-sm mt-1"><p>Click Here To Login</p></Link>
+            </>
         }
       </Card>
     </main>

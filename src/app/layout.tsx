@@ -26,7 +26,7 @@ export default function RootLayout({
       <body className={poppins.className}>
         <div className='flex relative'>
           <NavBar />
-          <div className='md:ml-[20px] w-full'>
+          <div className='md:ml-[72px] w-full'>
             {children}
             <div className='md:hidden'>
               <MobileNavBar />

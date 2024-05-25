@@ -24,8 +24,8 @@ export default async function Login() {
         <Card className="p-6 w-full md:w-[300px] bg-white bg-opacity-95 backdrop-filter backdrop-blur-xl ">
           <h1 className="text-2xl font-semibold">Login</h1>
           <LoginForm onSubmit={onSubmit} />
-          <Link href="/register"><h1>Dont have an account?</h1></Link>
-          <Link href="/forget"><h1>Forget Password?</h1></Link>
+          <Link href="/register" className="text-gray-400 text-sm mt-1"><p>Dont have an account?</p></Link>
+          <Link href="/forget" className="text-gray-400 text-sm mt-1"><p>Forget Password?</p></Link>
         </Card>
       </div>
     </main>

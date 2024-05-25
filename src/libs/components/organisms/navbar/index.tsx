@@ -10,7 +10,7 @@ interface NavBarProps {
 export default async function NavBar({ children }: NavBarProps) {
   const session = await getSession()
   return (
-    <div className={"w-16 sticky top-0 z-20"}>
+    <div className={"hidden md:block w-16 fixed top-0 z-20"}>
       <div className="w-full shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] bg-white bg-opacity-95 backdrop-blur-sm border px-3 py-2">
         <div className="flex flex-col py-4 justify-between min-h-screen">
           <div>

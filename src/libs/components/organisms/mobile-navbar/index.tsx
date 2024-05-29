@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { SquarePen, Home, CircleUserRound } from "lucide-react"
 import { Button } from "@/libs/components/atoms";
-import { getSession } from "@/libs/services";
+import { getSession } from "@/libs/services/auth";
 
 interface MobileNavBarProps {
   children?: React.ReactNode

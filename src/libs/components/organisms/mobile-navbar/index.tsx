@@ -1,14 +1,24 @@
+"use client"
+
 import Link from 'next/link'
 import { SquarePen, Home, CircleUserRound } from "lucide-react"
 import { Button } from "@/libs/components/atoms";
 import { getSession } from "@/libs/services/auth";
+import { useState, useEffect } from 'react';
 
 interface MobileNavBarProps {
   children?: React.ReactNode
 }
 
-export default async function MobileNavBar({ children }: MobileNavBarProps) {
-  const session = await getSession()
+export default function MobileNavBar({ children }: MobileNavBarProps) {
+  const [session, setSession] = useState(false)
+  useEffect(() => {
+    getSession().then((data) => {
+      if (data) {
+        setSession(true)
+      }
+    })
+  }, [])
   return (
     <div className={"fixed bottom-0 z-20 w-full md:hidden"}>
       <div className="w-full shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] bg-white bg-opacity-95 backdrop-blur-sm flex justify-between items-center rounded-lg border px-3 py-2">

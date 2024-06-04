@@ -5,6 +5,7 @@ import { Poppins } from 'next/font/google'
 import { Suspense } from 'react';
 import MobileNavBar from '@/libs/components/organisms/mobile-navbar';
 import NavBar from '@/libs/components/organisms/navbar';
+import { CookiesProvider } from 'next-client-cookies/server'
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -25,21 +26,23 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={poppins.className}>
-        <div className='flex relative'>
-          <Suspense>
-            <NavBar />
-          </Suspense>
-          <div className='md:ml-[72px] w-full'>
+        <CookiesProvider>
+          <div className='flex relative'>
             <Suspense>
-              {children}
+              <NavBar />
             </Suspense>
-            <div className='md:hidden'>
+            <div className='md:ml-[72px] w-full'>
               <Suspense>
-                <MobileNavBar />
+                {children}
               </Suspense>
+              <div className='md:hidden'>
+                <Suspense>
+                  <MobileNavBar />
+                </Suspense>
+              </div>
             </div>
           </div>
-        </div>
+        </CookiesProvider>
       </body>
     </html>
   )

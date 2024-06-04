@@ -3,18 +3,14 @@
 import Link from 'next/link'
 import { SquarePen, Home, CircleUserRound } from "lucide-react"
 import { Button } from "@/libs/components/atoms";
-// import { getSession } from "@/libs/services";
+import { useClientSession } from '@/libs/hooks';
 import { LogoutBtn } from '../../molecules/logout-button';
-import { useState, useEffect } from 'react';
 interface NavBarProps {
   children?: React.ReactNode
 }
 
 export default function NavBar({ children }: NavBarProps) {
-  const [session, setSession] = useState(false)
-  useEffect(() => {
-    setSession(true)
-  }, [session])
+  const session = useClientSession()
   return (
     <div className={"hidden md:block w-16 fixed top-0 z-20"}>
       <div className="w-full shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] bg-white bg-opacity-95 backdrop-blur-sm border px-3 py-2">

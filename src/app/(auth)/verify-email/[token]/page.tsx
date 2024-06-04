@@ -8,6 +8,7 @@ export default async function Activate({ params }: { params: { token: string } }
 
   const verified = await verifyEmail(params.token)
   if (!verified.errors) {
+    revalidatePath("/")
     redirect('/login')
   }
   return (

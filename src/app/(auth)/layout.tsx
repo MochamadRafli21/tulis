@@ -2,6 +2,7 @@ import '../globals.css'
 import 'react-quill/dist/quill.snow.css';
 import type { Metadata } from 'next'
 import { Poppins } from 'next/font/google'
+import { CookiesProvider } from 'next-client-cookies/server'
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -23,7 +24,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={poppins.className}>
-        {children}
+        <CookiesProvider>
+          {children}
+        </CookiesProvider>
       </body>
     </html>
   )

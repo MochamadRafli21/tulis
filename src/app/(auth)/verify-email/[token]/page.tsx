@@ -2,6 +2,7 @@ import { verifyEmail } from "@/app/actions";
 import Card from "@/libs/components/molecules/card";
 import Link from "next/link"
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 
 export default async function Activate({ params }: { params: { token: string } }) {

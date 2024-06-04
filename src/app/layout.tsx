@@ -30,7 +30,9 @@ export default function RootLayout({
             <NavBar />
           </Suspense>
           <div className='md:ml-[72px] w-full'>
-            {children}
+            <Suspense>
+              {children}
+            </Suspense>
             <div className='md:hidden'>
               <Suspense>
                 <MobileNavBar />

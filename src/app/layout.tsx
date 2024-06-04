@@ -2,6 +2,7 @@ import './globals.css'
 import 'react-quill/dist/quill.snow.css';
 import type { Metadata } from 'next'
 import { Poppins } from 'next/font/google'
+import { Suspense } from 'react';
 import MobileNavBar from '@/libs/components/organisms/mobile-navbar';
 import NavBar from '@/libs/components/organisms/navbar';
 
@@ -25,11 +26,15 @@ export default function RootLayout({
     <html lang="en">
       <body className={poppins.className}>
         <div className='flex relative'>
-          <NavBar />
+          <Suspense>
+            <NavBar />
+          </Suspense>
           <div className='md:ml-[72px] w-full'>
             {children}
             <div className='md:hidden'>
-              <MobileNavBar />
+              <Suspense>
+                <MobileNavBar />
+              </Suspense>
             </div>
           </div>
         </div>

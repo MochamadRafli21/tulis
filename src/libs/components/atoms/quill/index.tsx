@@ -98,7 +98,7 @@ export const Quill = (
         formats={[
           'header',
           'bold', 'italic', 'underline', 'strike', 'blockquote', 'code-block',
-          'list', 'bullet', 'indent', 'link', 'image'
+          'list', 'bullet', 'indent', 'link', 'image', 'align', 'direction', 'size', 'script'
         ]}
       >
       </CustomReactQuill>

@@ -1,5 +1,5 @@
 import { editBlog, removeBlog, getBlogDetail } from "@/app/actions";
-import { verifyToken, getSession } from "@/libs/services";
+import { getSession } from "@/libs/services";
 import { BlogForm } from "@/libs/components";
 import { redirect } from "next/navigation";
 import { BlogResponse } from "@/libs/zod/schema";
@@ -32,7 +32,7 @@ export default async function BlogUpdate({ params }: {
   }
 
   const blog = await getData()
-  const currentUser = session && await verifyToken(session)
+  const currentUser = session
   const isCurrentUser = currentUser ? blog?.userId === currentUser?.id : false
   if (!isCurrentUser) {
     redirect("/")

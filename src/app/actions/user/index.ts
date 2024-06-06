@@ -8,7 +8,6 @@ import {
   setPasswordWithToken
 } from "@/libs/services/user"
 import {
-  verifyToken,
   findUserToken,
   sendEmail,
   generateEmailVerificationLink,
@@ -47,7 +46,7 @@ export async function getCurrentUser() {
       throw new Error("User not found")
     }
 
-    const { id } = await verifyToken(session)
+    const { id } = session
     if (!id) {
       throw new Error("User not found")
     }
@@ -89,7 +88,7 @@ export async function updateProfile(prevData: EditUserResponse, formData: FormDa
       }
     }
 
-    const token = await verifyToken(session)
+    const token = session
     if (!token) {
       return {
         "errors": {

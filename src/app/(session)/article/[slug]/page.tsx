@@ -1,5 +1,4 @@
 import { getBlogBySlug } from "@/app/actions";
-import { verifyToken } from "@/libs/services";
 import { Button, QuilContent } from "@/libs/components/atoms";
 import { getSession } from "@/libs/services";
 import { Header } from "@/libs/components/organisms";
@@ -24,7 +23,7 @@ export default async function BlogDetail({ params }: {
   }
 
   const blog = await getData()
-  const currentUser = session && await verifyToken(session)
+  const currentUser = session
   const isCurrentUser = currentUser ? blog?.userId === currentUser?.id : false
 
   return (

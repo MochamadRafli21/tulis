@@ -29,5 +29,10 @@ export async function verifyToken(token: string): Promise<TokenPayload> {
 }
 
 export async function getSession() {
-  return cookies().get('session')?.value
+  const session = cookies().get('session')?.value
+  if (!session) {
+    return null
+  }
+  const payload = await verifyToken(session)
+  return payload
 }

@@ -3,7 +3,7 @@ import Card from "@/libs/components/molecules/card";
 import BlogList from "@/libs/components/molecules/blog-list";
 import { Header } from "@/libs/components/organisms";
 import { getUser } from "@/app/actions";
-import { verifyToken, getSession } from "@/libs/services";
+import { getSession } from "@/libs/services";
 
 import Image from "next/image"
 import Link from "next/link"
@@ -12,7 +12,7 @@ import { redirect } from "next/navigation"
 
 export default async function UserMe() {
   const session = await getSession()
-  const currentUser = session && await verifyToken(session)
+  const currentUser = session
   if (!currentUser) {
     redirect('/')
   }

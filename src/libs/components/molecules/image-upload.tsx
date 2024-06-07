@@ -44,7 +44,7 @@ export default function ImageUpload({
           label ? label : <UploadPreview />
         }
       </Label>
-      <input id={name} type="file" onChange={(e) => setImage(e)} name={name + "_file"} className='hidden' />
+      <input id={name} type="file" accept="image/*" onChange={(e) => setImage(e)} name={name + "_file"} className='hidden' />
       <input id={name} type="text" name={name} className='hidden' defaultValue={value} />
     </>
   )

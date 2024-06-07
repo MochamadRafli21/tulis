@@ -8,15 +8,13 @@ export const FollowBtn = ({ id, is_following }: { id: string, is_following: bool
   const handleFollow = async (id: string) => {
     const success = await updateMyFollow(id)
     if (success != null) {
-      console.log(success)
       setIsFollowing(!isFollowing)
-      console.log(isFollowing)
     }
   }
 
   return (
     <Button size={'sm'} variant={isFollowing ? "bordered" : "primary"}
-      onClick={() => handleFollow(id)}
+      onClick={async () => await handleFollow(id)}
     >
       {isFollowing ? "Followed" : "Follow"}
     </Button>

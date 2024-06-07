@@ -5,8 +5,8 @@ import { user } from '../user';
 
 export const follow = pgTable('follow', {
   id: uuid('id').defaultRandom().primaryKey(),
-  followerId: uuid('userId').notNull(),
-  followingId: uuid('userId').notNull(),
+  followerId: uuid('followerId').notNull(),
+  followingId: uuid('followingId').notNull(),
   ...baseSchema
 });
 

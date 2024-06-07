@@ -43,6 +43,13 @@
       "when": 1717770192604,
       "tag": "0005_curved_owl",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1717793904431,
+      "tag": "0006_exotic_kat_farrell",
+      "breakpoints": true
     }
   ]
 }

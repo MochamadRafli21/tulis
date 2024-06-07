@@ -146,7 +146,7 @@ export const getUserFollwerList = async (userId: string) => {
       id: user.id,
     })
     .from(user)
-    .innerJoin(follow, eq(user.id, follow.followingId))
+    .leftJoin(follow, eq(user.id, follow.followerId))
     .where(eq(follow.followerId, userId))
   return data
 }
@@ -157,35 +157,28 @@ export const getUserFollwingList = async (userId: string) => {
       id: user.id,
     })
     .from(user)
-    .innerJoin(follow, eq(user.id, follow.followerId))
-    .where(eq(follow.followerId, userId))
+    .leftJoin(follow, eq(user.id, follow.followingId))
+    .where(eq(follow.followingId, userId))
   return data
 }
 
-export const updateFollow = async (followerId: string, followingId: string) => {
-  const isExist = await db
-    .select()
-    .from(follow)
+export const setFollow = async (followerId: string, followingId: string) => {
+  const data = await db
+    .insert(follow)
+    .values({
+      followerId,
+      followingId
+    })
+    .returning();
+  return data;
+}
+
+export const unFollow = async (followerId: string, followingId: string) => {
+  const data = await db
+    .delete(follow)
     .where(and(eq(follow.followerId, followerId), eq(follow.followingId, followingId)))
-    .limit(1);
-
-  if (!isExist) {
-    await db
-      .insert(follow)
-      .values({
-        followerId,
-        followingId
-      })
-      .returning();
-    return false;
-  } else {
-    await db
-      .delete(follow)
-      .where(and(eq(follow.followerId, followerId), eq(follow.followingId, followingId)))
-      .returning();
-    return false;
-  }
-
+    .returning();
+  return data;
 }
 
 export const getIsFollowing = async (followerId: string, followingId: string) => {

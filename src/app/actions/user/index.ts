@@ -5,14 +5,16 @@ import {
   storeUser,
   getUserByEmail,
   requestForgetPassword,
-  setPasswordWithToken
+  setPasswordWithToken,
+  setFollow,
+  unFollow,
+  getIsFollowing
 } from "@/libs/services/user"
 import {
   findUserToken,
   sendEmail,
   generateEmailVerificationLink,
   generatePasswordResetLink,
-  updateFollow
 } from "@/libs/services"
 import { getSession } from "@/libs/services"
 import {
@@ -420,8 +422,15 @@ export const updateMyFollow = async (id: string) => {
     return null
   }
   try {
-    const data = await updateFollow(session.id, id)
-    return data
+    const isFollowing = await getIsFollowing(session.id, id)
+    if (isFollowing) {
+      await unFollow(session.id, id)
+      revalidatePath("/user/" + id)
+      return false
+    }
+    await setFollow(session.id, id)
+    revalidatePath("/user/" + id)
+    return true
   } catch (error) {
     return null
   }

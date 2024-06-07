@@ -1,11 +1,11 @@
 "use server"
 
 import { db } from "@/libs/database";
-import { user } from "@/libs/database/schema";
+import { user, follow } from "@/libs/database/schema";
 import { CreateUser, EditUser } from "@/libs/zod/schema";
 import { generateEmailVerificationToken } from "@/libs/services/email";
 
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import * as argon from "argon2";
 
 export const storeUser = async ({ name, email, password }: CreateUser) => {
@@ -102,7 +102,11 @@ export const getUserById = async (id: string) => {
     .where(eq(user.id, id))
     .limit(1);
 
-  return data[0];
+  const follower = await getUserFollwerList(id);
+  const following = await getUserFollwingList(id);
+  const profile = { ...data[0], followerCount: follower.length, followingCount: following.length };
+
+  return profile;
 }
 
 export const getUserByEmail = async (email: string) => {
@@ -129,4 +133,49 @@ export const getUserList = async () => {
     .from(user)
     .where(eq(user.is_verified, true))
   return data
+}
+
+export const getUserFollwerList = async (userId: string) => {
+  const data = await db
+    .select({
+      id: user.id,
+    })
+    .from(user)
+    .innerJoin(follow, eq(user.id, follow.followingId))
+    .where(eq(follow.followerId, userId))
+  return data
+}
+
+export const getUserFollwingList = async (userId: string) => {
+  const data = await db
+    .select({
+      id: user.id,
+    })
+    .from(user)
+    .innerJoin(follow, eq(user.id, follow.followerId))
+    .where(eq(follow.followerId, userId))
+  return data
+}
+
+export const updateFollow = async (followerId: string, followingId: string) => {
+  const isExist = await db
+    .select()
+    .from(follow)
+    .where(and(eq(follow.followerId, followerId), eq(follow.followingId, followingId)))
+    .limit(1);
+  if (isExist.length > 0) {
+    const data = await db
+      .delete(follow)
+      .where(and(eq(follow.followerId, followerId), eq(follow.followingId, followingId)))
+      .returning();
+    return data[0];
+  }
+  const data = await db
+    .insert(follow)
+    .values({
+      followerId,
+      followingId
+    })
+    .returning();
+  return data[0];
 }

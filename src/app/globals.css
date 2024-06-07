@@ -16,3 +16,10 @@
   word-wrap: break-word;
 }
 
+.ql-toolbar {
+  position: sticky;
+  top: 70px;
+  z-index: 20;
+  background-color: white;
+}
+

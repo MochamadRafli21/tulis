@@ -61,7 +61,7 @@ export default async function BlogDetail({ params }: {
           <h1 className="text-[42px] font-bold">{blog?.title}</h1>
           <h2 className="text-2xl text-gray-500 mt-5 mb-6">{blog?.subtitle}</h2>
         </div>
-        <QuilContent className={"mt-2 " + !session && "max-h-[800px] overflow-hidden"} content={blog ? blog.content : ""} />
+        <QuilContent className={"mt-2 " + session ? "" : "max-h-[800px] overflow-hidden"} content={blog ? blog.content : ""} />
       </div>
       {
         !session &&

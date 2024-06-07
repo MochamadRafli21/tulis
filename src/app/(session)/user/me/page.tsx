@@ -1,4 +1,4 @@
-import { Button, MasonryContainer, QuilContent } from "@/libs/components/atoms";
+import { MasonryContainer, QuilContent } from "@/libs/components/atoms";
 import Card from "@/libs/components/molecules/card";
 import BlogList from "@/libs/components/molecules/blog-list";
 import { Header } from "@/libs/components/organisms";

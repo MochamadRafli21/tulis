@@ -11,7 +11,8 @@ import {
   findUserToken,
   sendEmail,
   generateEmailVerificationLink,
-  generatePasswordResetLink
+  generatePasswordResetLink,
+  updateFollow
 } from "@/libs/services"
 import { getSession } from "@/libs/services"
 import {
@@ -411,4 +412,17 @@ export const isVerificationCodeValid = async (token: string) => {
       "access_token": token
     }
   };
+}
+
+export const updateMyFollow = async (id: string) => {
+  const session = await getSession()
+  if (!session) {
+    return null
+  }
+  try {
+    const data = await updateFollow(session.id, id)
+    return data
+  } catch (error) {
+    return null
+  }
 }

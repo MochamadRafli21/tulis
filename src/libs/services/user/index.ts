@@ -7,6 +7,7 @@ import { generateEmailVerificationToken } from "@/libs/services/email";
 
 import { eq, and } from "drizzle-orm";
 import * as argon from "argon2";
+import { getSession } from "../auth";
 
 export const storeUser = async ({ name, email, password }: CreateUser) => {
 
@@ -101,10 +102,14 @@ export const getUserById = async (id: string) => {
     .from(user)
     .where(eq(user.id, id))
     .limit(1);
+  const session = await getSession()
 
   const follower = await getUserFollwerList(id);
   const following = await getUserFollwingList(id);
-  const profile = { ...data[0], followerCount: follower.length, followingCount: following.length };
+  const profile = { ...data[0], followerCount: follower.length, followingCount: following.length, is_following: false };
+  if (session) {
+    profile.is_following = await getIsFollowing(session.id, id)
+  }
 
   return profile;
 }
@@ -163,19 +168,31 @@ export const updateFollow = async (followerId: string, followingId: string) => {
     .from(follow)
     .where(and(eq(follow.followerId, followerId), eq(follow.followingId, followingId)))
     .limit(1);
-  if (isExist.length > 0) {
-    const data = await db
+
+  if (!isExist) {
+    await db
+      .insert(follow)
+      .values({
+        followerId,
+        followingId
+      })
+      .returning();
+    return false;
+  } else {
+    await db
       .delete(follow)
       .where(and(eq(follow.followerId, followerId), eq(follow.followingId, followingId)))
       .returning();
-    return data[0];
+    return false;
   }
+
+}
+
+export const getIsFollowing = async (followerId: string, followingId: string) => {
   const data = await db
-    .insert(follow)
-    .values({
-      followerId,
-      followingId
-    })
-    .returning();
-  return data[0];
+    .select()
+    .from(follow)
+    .where(and(eq(follow.followerId, followerId), eq(follow.followingId, followingId)))
+    .limit(1);
+  return data.length > 0;
 }

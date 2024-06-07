@@ -15,7 +15,8 @@ export {
   activateUser,
   requestForgetPassword,
   setPasswordWithToken,
-  findUserToken
+  findUserToken,
+  updateFollow
 } from "./user"
 export {
   storeBlogUser,

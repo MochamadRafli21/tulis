@@ -8,7 +8,9 @@ import {
   setPasswordWithToken,
   setFollow,
   unFollow,
-  getIsFollowing
+  getIsFollowing,
+  getUserFollwerList,
+  getUserFollwingList
 } from "@/libs/services/user"
 import {
   findUserToken,
@@ -33,6 +35,30 @@ import { revalidatePath } from "next/cache"
 export async function getUser(id: string) {
   try {
     const data = await getUserById(id)
+    if (!data) {
+      throw new Error("User not found")
+    }
+    return data
+  } catch (error) {
+    console.log(error) // TODO: handle error
+  }
+}
+
+export async function getUserFollower(id: string) {
+  try {
+    const data = await getUserFollwerList(id)
+    if (!data) {
+      throw new Error("User not found")
+    }
+    return data
+  } catch (error) {
+    console.log(error) // TODO: handle error
+  }
+}
+
+export async function getUserFollowing(id: string) {
+  try {
+    const data = await getUserFollwingList(id)
     if (!data) {
       throw new Error("User not found")
     }

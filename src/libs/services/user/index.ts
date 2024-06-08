@@ -144,10 +144,15 @@ export const getUserFollwerList = async (userId: string) => {
   const data = await db
     .select({
       id: user.id,
+      name: user.name,
+      email: user.email,
+      avatar: user.avatar,
+      banner: user.banner,
+      bio: user.bio,
     })
     .from(user)
     .leftJoin(follow, eq(user.id, follow.followerId))
-    .where(eq(follow.followerId, userId))
+    .where(and(eq(follow.followingId, userId)))
   return data
 }
 
@@ -155,10 +160,15 @@ export const getUserFollwingList = async (userId: string) => {
   const data = await db
     .select({
       id: user.id,
+      name: user.name,
+      email: user.email,
+      avatar: user.avatar,
+      banner: user.banner,
+      bio: user.bio,
     })
     .from(user)
     .leftJoin(follow, eq(user.id, follow.followingId))
-    .where(eq(follow.followingId, userId))
+    .where(eq(follow.followerId, userId))
   return data
 }
 

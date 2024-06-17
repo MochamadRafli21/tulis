@@ -1,12 +1,13 @@
 "use server"
 
 import { db } from "@/libs/database";
-import { user } from "@/libs/database/schema";
+import { user, follow } from "@/libs/database/schema";
 import { CreateUser, EditUser } from "@/libs/zod/schema";
 import { generateEmailVerificationToken } from "@/libs/services/email";
 
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import * as argon from "argon2";
+import { getSession } from "../auth";
 
 export const storeUser = async ({ name, email, password }: CreateUser) => {
 
@@ -101,8 +102,16 @@ export const getUserById = async (id: string) => {
     .from(user)
     .where(eq(user.id, id))
     .limit(1);
+  const session = await getSession()
 
-  return data[0];
+  const follower = await getUserFollwerList(id);
+  const following = await getUserFollwingList(id);
+  const profile = { ...data[0], followerCount: follower.length, followingCount: following.length, is_following: false };
+  if (session) {
+    profile.is_following = await getIsFollowing(session.id, id)
+  }
+
+  return profile;
 }
 
 export const getUserByEmail = async (email: string) => {
@@ -129,4 +138,64 @@ export const getUserList = async () => {
     .from(user)
     .where(eq(user.is_verified, true))
   return data
+}
+
+export const getUserFollwerList = async (userId: string) => {
+  const data = await db
+    .select({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      avatar: user.avatar,
+      banner: user.banner,
+      bio: user.bio,
+    })
+    .from(user)
+    .leftJoin(follow, eq(user.id, follow.followerId))
+    .where(and(eq(follow.followingId, userId)))
+  return data
+}
+
+export const getUserFollwingList = async (userId: string) => {
+  const data = await db
+    .select({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      avatar: user.avatar,
+      banner: user.banner,
+      bio: user.bio,
+    })
+    .from(user)
+    .leftJoin(follow, eq(user.id, follow.followingId))
+    .where(eq(follow.followerId, userId))
+  return data
+}
+
+export const setFollow = async (followerId: string, followingId: string) => {
+  const data = await db
+    .insert(follow)
+    .values({
+      followerId,
+      followingId
+    })
+    .returning();
+  return data;
+}
+
+export const unFollow = async (followerId: string, followingId: string) => {
+  const data = await db
+    .delete(follow)
+    .where(and(eq(follow.followerId, followerId), eq(follow.followingId, followingId)))
+    .returning();
+  return data;
+}
+
+export const getIsFollowing = async (followerId: string, followingId: string) => {
+  const data = await db
+    .select()
+    .from(follow)
+    .where(and(eq(follow.followerId, followerId), eq(follow.followingId, followingId)))
+    .limit(1);
+  return data.length > 0;
 }

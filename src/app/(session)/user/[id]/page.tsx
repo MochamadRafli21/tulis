@@ -8,6 +8,7 @@ import { getSession } from "@/libs/services";
 import Image from "next/image"
 import Link from "next/link"
 import { SquarePen } from "lucide-react"
+import { FollowBtn } from "@/libs/components/molecules/follow-button";
 
 export default async function User({ params }: { params: { id: string } }) {
   const user = await getUser(params.id)
@@ -68,6 +69,15 @@ export default async function User({ params }: { params: { id: string } }) {
               user?.bio &&
               <QuilContent className="mt-2" content={user?.bio ?? ""} />
             }
+            <div className="mt-4 flex gap-4 px-3 pt-4 w-full items-center justify-between font-semibold text-xs md:text-sm text-gray-600">
+              <Link href={`/user/${user?.id}/follower`}>
+                <h6>Follower: {user?.followerCount ? user?.followerCount : 0}</h6>
+              </Link>
+              <Link href={`/user/${user?.id}/following`}>
+                <h6>Following: {user?.followingCount ? user?.followingCount : 0}</h6>
+              </Link>
+              <FollowBtn id={params?.id} is_following={user?.is_following ?? false} />
+            </div>
           </Card>
         </div>
 

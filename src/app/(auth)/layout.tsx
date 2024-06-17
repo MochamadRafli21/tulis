@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { Poppins } from 'next/font/google'
 import { CookiesProvider } from 'next-client-cookies/server'
 import { Suspense } from 'react';
+import Loading from './loading';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -26,7 +27,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={poppins.className}>
         <CookiesProvider>
-          <Suspense>
+          <Suspense fallback={<Loading />}>
             {children}
           </Suspense>
         </CookiesProvider>

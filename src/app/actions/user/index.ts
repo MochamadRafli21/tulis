@@ -5,13 +5,18 @@ import {
   storeUser,
   getUserByEmail,
   requestForgetPassword,
-  setPasswordWithToken
+  setPasswordWithToken,
+  setFollow,
+  unFollow,
+  getIsFollowing,
+  getUserFollwerList,
+  getUserFollwingList
 } from "@/libs/services/user"
 import {
   findUserToken,
   sendEmail,
   generateEmailVerificationLink,
-  generatePasswordResetLink
+  generatePasswordResetLink,
 } from "@/libs/services"
 import { getSession } from "@/libs/services"
 import {
@@ -30,6 +35,30 @@ import { revalidatePath } from "next/cache"
 export async function getUser(id: string) {
   try {
     const data = await getUserById(id)
+    if (!data) {
+      throw new Error("User not found")
+    }
+    return data
+  } catch (error) {
+    console.log(error) // TODO: handle error
+  }
+}
+
+export async function getUserFollower(id: string) {
+  try {
+    const data = await getUserFollwerList(id)
+    if (!data) {
+      throw new Error("User not found")
+    }
+    return data
+  } catch (error) {
+    console.log(error) // TODO: handle error
+  }
+}
+
+export async function getUserFollowing(id: string) {
+  try {
+    const data = await getUserFollwingList(id)
     if (!data) {
       throw new Error("User not found")
     }
@@ -411,4 +440,24 @@ export const isVerificationCodeValid = async (token: string) => {
       "access_token": token
     }
   };
+}
+
+export const updateMyFollow = async (id: string) => {
+  const session = await getSession()
+  if (!session) {
+    return null
+  }
+  try {
+    const isFollowing = await getIsFollowing(session.id, id)
+    if (isFollowing) {
+      await unFollow(session.id, id)
+      revalidatePath("/user/" + id)
+      return false
+    }
+    await setFollow(session.id, id)
+    revalidatePath("/user/" + id)
+    return true
+  } catch (error) {
+    return null
+  }
 }

@@ -6,6 +6,7 @@ import { Suspense } from 'react';
 import MobileNavBar from '@/libs/components/organisms/mobile-navbar';
 import NavBar from '@/libs/components/organisms/navbar';
 import { CookiesProvider } from 'next-client-cookies/server'
+import Loading from './loading';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -32,7 +33,7 @@ export default function RootLayout({
               <NavBar />
             </Suspense>
             <div className='md:ml-[72px] w-full'>
-              <Suspense>
+              <Suspense fallback={<Loading />}>
                 {children}
               </Suspense>
               <div className='md:hidden'>

@@ -1,11 +1,12 @@
 "use server"
 
 import { db } from "@/libs/database";
-import { blog, bloguser, user } from "@/libs/database/schema";
+import { blog, bloguser, user, like } from "@/libs/database/schema";
 import { Blog } from "@/libs/zod/schema";
 import { eq, desc, and, ilike, or } from "drizzle-orm";
 import DOMPurify from "isomorphic-dompurify";
 import { generateSlug } from "@/libs/utils";
+import { revalidatePath } from "next/cache";
 
 export const storeBlog = async ({ title, content, is_published, subtitle, banner }: Blog) => {
   const data = await db
@@ -167,3 +168,65 @@ export const getBlogs = async (page?: number, pageSize?: number, q?: string) => 
   return data;
 }
 
+export const updateBlogLike = async (id: string, userId: string) => {
+  const exist = await db
+    .select({
+      id: like.id,
+      userId: like.userId,
+      blogId: like.blogId,
+      slug: blog.slug
+    })
+    .from(like)
+    .leftJoin(blog, eq(like.blogId, blog.id))
+    .where(
+      and(
+        eq(like.userId, userId),
+        eq(like.blogId, id)
+      )
+    )
+    .limit(1);
+  if (exist.length > 0) {
+    const data = await db
+      .delete(like)
+      .where(
+        and(
+          eq(like.userId, userId),
+          eq(like.blogId, id)
+        )
+      )
+      .returning();
+    revalidatePath("/blog/[slug]");
+    return data
+  } else {
+    revalidatePath("/blog/[slug]");
+    return await db
+      .insert(like)
+      .values({
+        userId: userId,
+        blogId: id
+      })
+      .returning();
+  }
+}
+
+export const getBlogLike = async (slug: string) => {
+  const likes = await db
+    .select({
+      id: like.id,
+      userId: like.userId,
+      blogId: blog.id
+    })
+    .from(like)
+    .innerJoin(blog, eq(blog.id, like.blogId))
+    .where(
+      and(
+        eq(blog.slug, slug)
+      )
+    )
+  const likesCount = likes.length
+  const data = {
+    likesCount: likesCount,
+    data: likes
+  }
+  return data;
+}

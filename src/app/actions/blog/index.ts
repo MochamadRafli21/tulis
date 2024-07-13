@@ -10,7 +10,9 @@ import {
   getBlogs,
   findBlogUser,
   storeBlogUser,
-  deleteBlogUser
+  deleteBlogUser,
+  getBlogLike,
+  updateBlogLike
 } from "@/libs/services"
 import { revalidatePath } from "next/cache"
 import { getSession } from "@/libs/services"
@@ -199,6 +201,33 @@ export async function getBlogBySlug(slug: string) {
 export async function getBlogDetail(id: string) {
   try {
     const data = await getBlogById(id)
+    return data
+  } catch (error) {
+    console.log(error) // TODO: handle error
+  }
+}
+
+export async function getLikes(id: string) {
+  try {
+    const data = await getBlogLike(id)
+    return data
+  } catch (error) {
+    console.log(error) // TODO: handle error
+  }
+}
+
+
+export async function updateLikes(blogId: string) {
+  try {
+    const session = await getSession()
+    if (!session) {
+      throw new Error("User not found")
+    }
+    const { id: userId } = session
+    if (!userId) {
+      throw new Error("User not found")
+    }
+    const data = await updateBlogLike(blogId, userId)
     return data
   } catch (error) {
     console.log(error) // TODO: handle error

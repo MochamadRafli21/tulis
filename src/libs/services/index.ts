@@ -4,7 +4,9 @@ export {
   getBlogs,
   destroyBlog,
   updateBlog,
-  storeBlog
+  storeBlog,
+  updateBlogLike,
+  getBlogLike
 } from "./blog"
 export {
   storeUser,

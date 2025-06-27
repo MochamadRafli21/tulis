@@ -1,10 +1,8 @@
 {
-  "id": "6814930b-eca3-41fa-b056-198f8b53dad2",
-  "prevId": "e0c9e9d3-4017-4245-9031-19305db75354",
-  "version": "5",
-  "dialect": "pg",
+  "version": "7",
+  "dialect": "postgresql",
   "tables": {
-    "blogs": {
+    "public.blogs": {
       "name": "blogs",
       "schema": "",
       "columns": {
@@ -73,14 +71,17 @@
       "uniqueConstraints": {
         "blogs_slug_unique": {
           "name": "blogs_slug_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "slug"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
-      }
+      },
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
-    "bloguser": {
+    "public.bloguser": {
       "name": "bloguser",
       "schema": "",
       "columns": {
@@ -120,9 +121,12 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
-    "user": {
+    "public.user": {
       "name": "user",
       "schema": "",
       "columns": {
@@ -206,19 +210,28 @@
       "uniqueConstraints": {
         "user_email_unique": {
           "name": "user_email_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "email"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
-      }
+      },
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     }
   },
   "enums": {},
   "schemas": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
-  }
+    "tables": {},
+    "columns": {}
+  },
+  "id": "6814930b-eca3-41fa-b056-198f8b53dad2",
+  "prevId": "e0c9e9d3-4017-4245-9031-19305db75354",
+  "sequences": {},
+  "policies": {},
+  "views": {},
+  "roles": {}
 }

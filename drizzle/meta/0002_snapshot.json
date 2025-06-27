@@ -1,10 +1,8 @@
 {
-  "id": "012dbf49-1016-4955-bb4d-32afd56ac13a",
-  "prevId": "f09274af-d7bd-4a6e-9d7b-9d13b31525e1",
-  "version": "5",
-  "dialect": "pg",
+  "version": "7",
+  "dialect": "postgresql",
   "tables": {
-    "blogs": {
+    "public.blogs": {
       "name": "blogs",
       "schema": "",
       "columns": {
@@ -73,19 +71,28 @@
       "uniqueConstraints": {
         "blogs_slug_unique": {
           "name": "blogs_slug_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "slug"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
-      }
+      },
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     }
   },
   "enums": {},
   "schemas": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
-  }
+    "tables": {},
+    "columns": {}
+  },
+  "id": "012dbf49-1016-4955-bb4d-32afd56ac13a",
+  "prevId": "f09274af-d7bd-4a6e-9d7b-9d13b31525e1",
+  "sequences": {},
+  "policies": {},
+  "views": {},
+  "roles": {}
 }
